@@ -1,0 +1,6 @@
+{
+  "name": "reinats-barbershop",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "node build.mjs", "serve": "npx --yes http-server docs -p 5173 -c-1" }
+}

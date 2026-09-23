@@ -1,0 +1,40 @@
+<!doctype html>
+<!--meta {"key":"book","noOffer":true,"title":"Book an Appointment — Reinat’s Barber Studio, Harare","description":"Book a haircut, fade, beard trim or shave at Reinat’s Barber Studio in Harare. Choose your service, barber, date and time, then add it to Google or Apple Calendar."} -->
+<html lang="en">
+<head>
+<!--@head-->
+</head>
+<body data-page="book" class="has-mobile-sum">
+<!--@header-->
+
+<main id="main">
+  <section class="page-hero" style="padding-bottom:clamp(20px,3vw,32px)">
+    <div class="container">
+      <span class="eyebrow" data-book-eyebrow>Online booking</span>
+      <div class="page-hero__row" style="margin-top:14px">
+        <h1 class="display-l" data-book-title>Book your <em>chair.</em></h1>
+        <p class="lead" data-book-lead>Four quick steps. Live availability for the next three weeks, and a calendar invite at the end.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-bottom:clamp(64px,8vw,112px)">
+    <div class="container">
+      <div id="booking-app" aria-live="polite">
+        <noscript><div class="notice notice--warn">Online booking needs JavaScript. Please enable it, or call us on <a href="tel:+263772555018">+263 77 255 5018</a> to book.</div></noscript>
+      </div>
+      <div class="my-bookings" data-my-bookings hidden></div>
+    </div>
+  </section>
+</main>
+
+<div class="mobile-sum" data-mobile-sum hidden>
+  <div class="mobile-sum__txt"><strong data-ms-title>Choose a service</strong><span data-ms-sub>Step 1 of 4</span></div>
+  <button type="button" class="btn btn--lime btn--sm" data-ms-next>Continue →</button>
+</div>
+
+<!--@footer-->
+<script src="assets/js/calendar.js" defer></script>
+<script src="assets/js/booking.js" defer></script>
+</body>
+</html>

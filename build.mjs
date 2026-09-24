@@ -4,7 +4,9 @@ import { join } from 'node:path';
 
 const SRC = 'src';
 const OUT = 'docs';
-const SITE_URL = process.env.SITE_URL || 'https://stanier1.github.io/reinats-barbershop/';
+const ON_VERCEL = !!process.env.VERCEL;
+const SITE_URL = process.env.SITE_URL
+  || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? 'https://' + process.env.VERCEL_PROJECT_PRODUCTION_URL + '/' : 'https://stanier1.github.io/reinats-barbershop/');
 
 const partial = (name) => readFileSync(join(SRC, 'partials', name + '.html'), 'utf8');
 const head = partial('head');
@@ -36,6 +38,9 @@ for (const file of pages) {
     .replaceAll('{{canonical}}', canonical)
     .replaceAll('{{og}}', SITE_URL + 'assets/img/og.jpg')
     .replaceAll('{{page}}', meta.key);
+
+  // GitHub Pages serves the site from /reinats-barbershop/, so its 404 page needs a <base>; Vercel serves from /.
+  if (ON_VERCEL) html = html.replace(/<base [^>]*>\s*/, '');
 
   html = html
     .replace('<!--@head-->', headHtml)

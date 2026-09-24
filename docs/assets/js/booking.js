@@ -244,7 +244,7 @@
   /* ---------- Confirmation ---------- */
   function viewConfirm() {
     const b = state.conf, s = svcById(b.svc), br = barberById(b.barber);
-    const ev = RB.calendar.event(b);
+    const ev = RB.calendar.event(b), apple = RB.calendar.appleUrl(b);
     return `
       <div class="confirm">
         <div class="confirm__main">
@@ -255,7 +255,9 @@
             <h2>Add it to your calendar</h2>
             <div class="cal-btns">
               <a class="cal-btn cal-btn--primary" href="${esc(RB.calendar.google(ev))}" target="_blank" rel="noopener noreferrer"><span class="cal-btn__ic">${ic.google}</span><span>Google Calendar<small>Opens in a new tab</small></span></a>
-              <button type="button" class="cal-btn" data-ics="${esc(b.ref)}"><span class="cal-btn__ic">${ic.apple}</span><span>Apple Calendar<small>iPhone, iPad &amp; Mac (.ics)</small></span></button>
+              ${apple
+                ? `<a class="cal-btn" href="${esc(apple)}"><span class="cal-btn__ic">${ic.apple}</span><span>Apple Calendar<small>iPhone, iPad &amp; Mac</small></span></a>`
+                : `<button type="button" class="cal-btn" data-ics="${esc(b.ref)}"><span class="cal-btn__ic">${ic.apple}</span><span>Apple Calendar<small>iPhone, iPad &amp; Mac (.ics)</small></span></button>`}
               <a class="cal-btn" href="${esc(RB.calendar.outlook(ev))}" target="_blank" rel="noopener noreferrer"><span class="cal-btn__ic">${ic.outlook}</span><span>Outlook.com<small>Opens in a new tab</small></span></a>
               <button type="button" class="cal-btn" data-ics="${esc(b.ref)}"><span class="cal-btn__ic">${ic.download}</span><span>Download .ics<small>Any other calendar app</small></span></button>
             </div>
@@ -421,7 +423,7 @@
         <div class="mb-item__main"><strong>${esc(s.name)} with ${esc(br.first)}${cancelled ? ' — cancelled' : ''}</strong><span>${esc(T.long(b.date))} · ${T.fmt(b.start)} · Ref ${esc(b.ref)}</span></div>
         ${cancelled ? '' : `<div class="mb-item__acts">
           <a class="btn btn--ghost btn--sm" href="${esc(RB.calendar.google(RB.calendar.event(b)))}" target="_blank" rel="noopener noreferrer">Google Calendar</a>
-          <button type="button" class="btn btn--ghost btn--sm" data-ics="${esc(b.ref)}">Apple / .ics</button>
+          ${RB.calendar.appleUrl(b) ? `<a class="btn btn--ghost btn--sm" href="${esc(RB.calendar.appleUrl(b))}">Apple Calendar</a>` : `<button type="button" class="btn btn--ghost btn--sm" data-ics="${esc(b.ref)}">Apple / .ics</button>`}
           <button type="button" class="btn btn--ghost btn--sm" data-cancel="${esc(b.ref)}">Cancel</button>
         </div>`}
       </div>`;

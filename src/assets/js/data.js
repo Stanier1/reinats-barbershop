@@ -14,7 +14,12 @@ window.RB = {
     tzLabel: 'Harare time (CAT)',
     utcOffsetMinutes: 120,
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Kingsmead+Road+Borrowdale+Harare',
-    siteUrl: 'https://stanier1.github.io/reinats-barbershop/'
+    // Site root, worked out from the current page so it's right on any host.
+    siteUrl: typeof location !== 'undefined' && /^https?:$/.test(location.protocol)
+      ? location.href.replace(/[?#].*$/, '').replace(/[^/]*$/, '')
+      : 'https://reinats-barbershop.vercel.app/',
+    // Hosts with the /api/calendar endpoint (anything but GitHub Pages) serve real .ics files, which iPhones need.
+    icsApi: typeof location !== 'undefined' && /^https?:$/.test(location.protocol) && !/github\.io$/.test(location.hostname)
   },
 
   // Opening hours per weekday (0 = Sunday). Minutes from midnight, null = closed.

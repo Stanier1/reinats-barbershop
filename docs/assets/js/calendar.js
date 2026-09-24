@@ -1,6 +1,6 @@
 /* Calendar export: Google Calendar link, Outlook link and an RFC 5545 .ics file (Apple Calendar, Outlook desktop, etc). */
-(function () {
-  const RB = window.RB;
+(function (root) {
+  const RB = root.RB;
   const pad = (n) => String(n).padStart(2, '0');
   const utcStamp = (d) => d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + 'Z';
   const localStamp = (key, min) => key.replace(/-/g, '') + 'T' + pad(Math.floor(min / 60)) + pad(min % 60) + '00';
@@ -32,9 +32,9 @@
       'Service: ' + svc.name + ' (' + svc.min + ' min)',
       'Barber: ' + barber.name,
       'When: ' + RB.time.long(b.date) + ', ' + RB.time.fmt(b.start) + ' – ' + RB.time.fmt(b.end) + ' (' + RB.shop.tzLabel + ')',
-      'Client: ' + b.name,
       'Price: ' + b.totalLabel + (b.discount ? ' (incl. ' + b.discountLabel + ' first-visit discount)' : '') + ' — pay in the shop',
     ];
+    if (b.name) lines.splice(4, 0, 'Client: ' + b.name);
     if (b.notes) lines.push('Notes: ' + b.notes);
     lines.push('', 'Please arrive 5 minutes early. Need to change or cancel? Call ' + RB.shop.phone + ' at least 12 hours before.', RB.shop.siteUrl + 'book.html');
     return {
@@ -92,14 +92,16 @@
     return lines.map(fold).join('\r\n') + '\r\n';
   }
 
+  // Real https .ics URL (no personal details in it) — the only way iOS Safari offers "Add to Calendar".
+  function appleUrl(b) {
+    if (!RB.shop.icsApi) return null;
+    const p = new URLSearchParams({ ref: b.ref, svc: b.svc, barber: b.barber, date: b.date, start: String(b.start) });
+    if (b.discount) p.set('code', RB.promo.code);
+    return RB.shop.siteUrl + 'api/calendar?' + p.toString();
+  }
+
   function downloadIcs(ev, filename) {
     const text = ics(ev);
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    if (isIOS) {
-      // iOS Safari opens text/calendar data directly in the "Add to Calendar" sheet.
-      window.location.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(text);
-      return;
-    }
     const url = URL.createObjectURL(new Blob([text], { type: 'text/calendar;charset=utf-8' }));
     const a = document.createElement('a');
     a.href = url; a.download = filename; a.rel = 'noopener';
@@ -107,5 +109,5 @@
     setTimeout(() => URL.revokeObjectURL(url), 4000);
   }
 
-  RB.calendar = { event, google, outlook, ics, downloadIcs };
-})();
+  RB.calendar = { event, google, outlook, ics, appleUrl, downloadIcs };
+})(typeof window !== 'undefined' ? window : globalThis);

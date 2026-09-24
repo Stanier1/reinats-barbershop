@@ -1,4 +1,4 @@
-// GET /api/calendar?ref=RB-XXXXX&svc=skin-fade&barber=farai&date=2026-09-30&start=900[&code=FIRSTFADE]
+// GET /api/calendar?ref=RB-XXXXX&svc=skin-fade&barber=farai&date=2026-09-30&start=900[&code=FirstFade26]
 // Returns a real text/calendar file. iOS Safari only offers "Add to Calendar" for a genuine https .ics
 // response, not for blob: or data: URLs, so this is what the Apple Calendar button links to.
 // The event is rebuilt from the shared site data, so it matches the in-page confirmation exactly.
@@ -38,7 +38,7 @@ export default function handler(req, res) {
   const hrs = rb.hours[rb.time.dow(date)];
   if (!Number.isInteger(start) || !hrs || start < hrs[0] || start + svc.min > hrs[1] || start % 30) return fail('time');
 
-  const discount = q.get('code') === rb.promo.code && !rb.promo.excludes.includes(svc.cat) ? Math.round(svc.price * rb.promo.percent) / 100 : 0;
+  const discount = (q.get('code') || '').toUpperCase() === rb.promo.code.toUpperCase() && !rb.promo.excludes.includes(svc.cat) ? Math.round(svc.price * rb.promo.percent) / 100 : 0;
   const booking = {
     ref, svc: svc.id, barber: barber.id, date, start, end: start + svc.min,
     discount, discountLabel: money(discount), totalLabel: money(svc.price - discount)

@@ -160,7 +160,7 @@
       const img = $('[data-lb-img]', lb), cap = $('[data-lb-cap]', lb), handle = $('[data-lb-handle]', lb), book = $('[data-lb-book]', lb);
       const closeLb = () => closeLayer(lb);
       $$('[data-reel]').forEach((r) => r.addEventListener('click', () => {
-        img.src = r.dataset.img; img.alt = r.dataset.caption; cap.textContent = r.dataset.caption; handle.textContent = r.dataset.handle;
+        img.src = r.dataset.img; img.alt = r.dataset.caption; cap.textContent = r.dataset.caption; handle.textContent = r.dataset.handle + ' ↗'; handle.href = 'https://www.instagram.com/' + r.dataset.handle.replace(/^@/, '') + '/';
         book.href = 'book.html?service=' + r.dataset.service; book.textContent = 'Book this look →';
         openLayer(lb);
       }));

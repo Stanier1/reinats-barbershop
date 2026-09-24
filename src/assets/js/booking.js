@@ -13,11 +13,13 @@
   const STEPS = ['Service', 'Barber', 'Date & time', 'Your details'];
   const svcById = (id) => RB.services.find((s) => s.id === id);
   const barberById = (id) => RB.barbers.find((b) => b.id === id);
+  // Codes match case-insensitively; a valid one is always shown in its canonical spelling.
+  const normCode = (c) => { const t = String(c || '').trim(); return t.toUpperCase() === RB.promo.code.toUpperCase() ? RB.promo.code : t.toUpperCase(); };
 
   /* ---------- State ---------- */
   const params = new URLSearchParams(location.search);
-  let code = (params.get('code') || '').toUpperCase();
-  try { if (!code) code = (sessionStorage.getItem('rb_code') || '').toUpperCase(); } catch (e) { /* ignore */ }
+  let code = normCode(params.get('code'));
+  try { if (!code) code = normCode(sessionStorage.getItem('rb_code')); } catch (e) { /* ignore */ }
   const saved = S.get('rb_client', {});
   const state = {
     step: 1,
@@ -38,7 +40,7 @@
   function discountFor(s, c) {
     if (!s || !c) return { amount: 0, msg: '' };
     if (c !== RB.promo.code) return { amount: 0, msg: 'That code isn’t valid.', bad: true };
-    if (RB.promo.excludes.includes(s.cat)) return { amount: 0, msg: 'FIRSTFADE can’t be used on packages.', bad: true };
+    if (RB.promo.excludes.includes(s.cat)) return { amount: 0, msg: RB.promo.code + ' can’t be used on packages.', bad: true };
     if (A.bookings().some((b) => b.code === RB.promo.code)) return { amount: 0, msg: 'This code has already been used on this device.', bad: true };
     return { amount: Math.round(s.price * RB.promo.percent) / 100, msg: RB.promo.percent + '% off applied.' };
   }
@@ -188,7 +190,7 @@
         <div class="field span-2">
           <label for="bk-code">Promo code <span class="field__opt">(optional)</span></label>
           <div class="promo-row">
-            <input id="bk-code" name="code" class="input" value="${esc(f.code)}" placeholder="FIRSTFADE" autocomplete="off" autocapitalize="characters" aria-describedby="bk-code-msg">
+            <input id="bk-code" name="code" class="input" value="${esc(f.code)}" placeholder="e.g. ${esc(RB.promo.code)}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="bk-code-msg">
             <button type="button" class="btn btn--ghost" data-apply-code>Apply</button>
           </div>
           <div class="${d.amount ? 'field__ok' : 'field__err'}" id="bk-code-msg" role="status">${esc(state.codeMsg)}</div>
@@ -365,7 +367,7 @@
     if (!EMAIL.test(f.email.trim())) e.email = 'Please enter a valid email address.';
     if (!f.agree) e.agree = 'Please accept the Terms & Conditions to continue.';
     // A typed-but-unapplied code is applied automatically so nobody loses their discount.
-    const typed = f.code.trim().toUpperCase();
+    const typed = normCode(f.code);
     if (typed && typed !== state.appliedCode) {
       const d = discountFor(svc(), typed);
       state.appliedCode = typed === RB.promo.code ? typed : ''; state.codeMsg = d.msg;
@@ -451,7 +453,7 @@
     }
     if (t.hasAttribute('data-apply-code')) {
       readForm();
-      const c = state.form.code.trim().toUpperCase();
+      const c = normCode(state.form.code);
       if (!c) { state.appliedCode = ''; state.codeMsg = 'Enter a code first.'; }
       else { state.appliedCode = c === RB.promo.code ? c : ''; state.codeMsg = discountFor(svc(), c).msg; delete state.errors.code; }
       state.form.code = c;
@@ -488,7 +490,7 @@
   app.addEventListener('change', (e) => { if (e.target.name === 'agree') { state.form.agree = e.target.checked; if (e.target.checked) { delete state.errors.agree; $('#bk-agree-err', app).textContent = ''; } } });
 
   // Pre-apply a code that arrived via the offer popup or a link.
-  if (code === RB.promo.code) { state.appliedCode = code; state.codeMsg = svc() ? discountFor(svc(), code).msg : 'FIRSTFADE will be applied at checkout.'; }
+  if (code === RB.promo.code) { state.appliedCode = code; state.codeMsg = svc() ? discountFor(svc(), code).msg : RB.promo.code + ' will be applied at checkout.'; }
   else if (code) state.codeMsg = 'That code isn’t valid.';
   if (state.step === 3) { state.date = firstOpenDay(); }
   render(false);

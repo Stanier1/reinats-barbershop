@@ -43,7 +43,7 @@
         </div>
         <div class="barber__body">
           <h3>${esc(b.name)}</h3>
-          <div class="barber__role">${esc(b.role)} · ${esc(b.ig)}</div>
+          <div class="barber__role">${esc(b.role)} · <a href="https://www.instagram.com/${esc(b.ig.slice(1))}/" target="_blank" rel="noopener noreferrer" aria-label="${esc(b.first)} on Instagram (opens in a new tab)">${esc(b.ig)}</a></div>
           <p>${esc(b.bio)}</p>
           <div class="tags">${b.spec.map((s) => `<span class="tag">${esc(s)}</span>`).join('')}</div>
           <div class="barber__days">In the studio: ${b.days.map((d) => DAYS[d]).join(', ')}</div>

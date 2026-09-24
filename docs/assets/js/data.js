@@ -9,7 +9,7 @@ window.RB = {
     address: '27 Kingsmead Road, Borrowdale, Harare, Zimbabwe',
     phone: '+263 77 255 5018',
     phoneHref: 'tel:+263772555018',
-    email: 'hello@reinats.studio',
+    email: 'admin@reinats.studio',
     tz: 'Africa/Harare',
     tzLabel: 'Harare time (CAT)',
     utcOffsetMinutes: 120,
@@ -68,5 +68,5 @@ window.RB = {
     { id: 'farai', name: 'Farai Dube', first: 'Farai', role: 'Shave & Grooming Specialist', img: 'barber-farai.jpg', days: [1, 3, 4, 5, 6], years: 9, spec: ['Hot towel shaves', 'Beard sculpts', 'Facials'], ig: '@farai.shaves', bio: 'Trained in Johannesburg and obsessed with the straight razor. If you want a beard that looks drawn on, Farai is your guy. Off on Tuesdays.' }
   ],
 
-  promo: { code: 'FIRSTFADE', percent: 20, excludes: ['packages'] }
+  promo: { code: 'FirstFade26', percent: 20, excludes: ['packages'] }
 };

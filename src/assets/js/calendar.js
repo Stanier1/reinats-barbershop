@@ -32,7 +32,7 @@
       'Service: ' + svc.name + ' (' + svc.min + ' min)',
       'Barber: ' + barber.name,
       'When: ' + RB.time.long(b.date) + ', ' + RB.time.fmt(b.start) + ' – ' + RB.time.fmt(b.end) + ' (' + RB.shop.tzLabel + ')',
-      'Price: ' + b.totalLabel + (b.discount ? ' (incl. ' + b.discountLabel + ' first-visit discount)' : '') + ' — pay in the shop',
+      'Price: ' + b.totalLabel + (b.discount ? ' (incl. ' + b.discountLabel + ' first-visit discount)' : '') + ', pay in the shop',
     ];
     if (b.name) lines.splice(4, 0, 'Client: ' + b.name);
     if (b.notes) lines.push('Notes: ' + b.notes);
@@ -92,7 +92,7 @@
     return lines.map(fold).join('\r\n') + '\r\n';
   }
 
-  // Real https .ics URL (no personal details in it) — the only way iOS Safari offers "Add to Calendar".
+  // Real https .ics URL (no personal details in it): the only way iOS Safari offers "Add to Calendar".
   function appleUrl(b) {
     if (!RB.shop.icsApi) return null;
     const p = new URLSearchParams({ ref: b.ref, svc: b.svc, barber: b.barber, date: b.date, start: String(b.start) });

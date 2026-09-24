@@ -209,7 +209,7 @@
   function summaryHtml() {
     const s = svc(), d = discount();
     const barber = state.barber === 'any' ? 'Any barber' : barberById(state.barber).name;
-    const row = (k, v, cls = '') => `<div><dt>${k}</dt><dd class="${v ? cls : 'is-empty'}">${v ? esc(v) : '—'}</dd></div>`;
+    const row = (k, v, cls = '') => `<div><dt>${k}</dt><dd class="${v ? cls : 'is-empty'}">${v ? esc(v) : 'Not chosen'}</dd></div>`;
     return `
       <div class="summary">
         <div class="summary__head"><h2>Your appointment</h2><span class="sticker sticker--lime" style="padding:6px 10px;font-size:12px">Pay in shop</span></div>
@@ -222,8 +222,19 @@
           ${d.amount ? row('Discount', '−' + money(d.amount) + ' (' + state.appliedCode + ')', 'is-discount') : ''}
         </dl>
         <div class="summary__total"><span>Total</span><strong>${s ? money(s.price - d.amount) : '$0'}</strong></div>
+        ${summaryNav()}
         <div class="summary__foot">${esc(RB.shop.address)} · <a href="${RB.shop.phoneHref}">${esc(RB.shop.phone)}</a><br>Free changes up to 12 hours before.</div>
       </div>`;
+  }
+
+  // Primary action sits right under the total so nobody has to scroll to continue.
+  function canNext() { return state.step === 1 ? !!state.svc : state.step === 2 ? true : state.step === 3 ? !!(state.date && state.time != null) : true; }
+  function summaryNav() {
+    const label = ['Continue', 'Continue', 'Continue to details', 'Confirm booking'][state.step - 1];
+    return `<div class="summary__nav">
+      <button type="button" class="btn btn--lime btn--lg" data-sum-next ${canNext() ? '' : 'disabled'}>${label} <span aria-hidden="true">→</span></button>
+      ${state.step > 1 ? '<button type="button" class="btn btn--ghost" data-back>Back</button>' : ''}
+    </div>`;
   }
 
   function progressHtml() {
@@ -251,7 +262,7 @@
       <div class="confirm">
         <div class="confirm__main">
           <div class="confirm__badge">${ic.check}</div>
-          <h2 class="panel-title" tabindex="-1" style="font-size:clamp(34px,4.4vw,56px)">See you soon, ${esc(b.name.split(' ')[0])}.</h2>
+          <h2 class="panel-title" tabindex="-1" style="font-size:clamp(34px,4.4vw,56px)">See you soon, ${esc(b.name.split(' ')[0])}</h2>
           <p class="confirm__lead">Your <strong>${esc(s.name)}</strong> with <strong>${esc(br.name)}</strong> is booked for <strong>${esc(T.long(b.date))} at ${T.fmt(b.start)}</strong>. Show reference <strong>${esc(b.ref)}</strong> at reception.</p>
           <div class="cal-box">
             <h2>Add it to your calendar</h2>
@@ -293,13 +304,13 @@
     const strip = $('.day-strip', app), keep = strip ? strip.scrollLeft : 0;
     if (state.step === 5) {
       heroEyebrow.textContent = 'Booking confirmed';
-      heroTitle.innerHTML = 'You’re <em>booked.</em>';
+      heroTitle.innerHTML = 'You’re <em>booked</em>';
       heroLead.textContent = 'We’ve saved your appointment. Add it to your calendar so you don’t forget.';
       app.innerHTML = viewConfirm();
       ms.hidden = true; document.body.classList.remove('has-mobile-sum');
     } else {
       heroEyebrow.textContent = 'Online booking';
-      heroTitle.innerHTML = 'Book your <em>chair.</em>';
+      heroTitle.innerHTML = 'Book your <em>chair</em>';
       heroLead.textContent = 'Four quick steps. Live availability for the next three weeks, and a calendar invite at the end.';
       const view = [viewService, viewBarber, viewTime, viewDetails][state.step - 1]();
       app.innerHTML = `
@@ -389,7 +400,7 @@
     if (!slot || !slot.free.length) {
       state.time = null; state.step = 3; render(true);
       const p = $('[data-panel]', app);
-      p.insertAdjacentHTML('afterbegin', '<div class="notice notice--warn" style="margin-bottom:18px" role="alert">Sorry — that time was just taken. Please pick another.</div>');
+      p.insertAdjacentHTML('afterbegin', '<div class="notice notice--warn" style="margin-bottom:18px" role="alert">Sorry, that time was just taken. Please pick another.</div>');
       return;
     }
     const barberId = state.barber === 'any' ? slot.free[(state.time / 30) % slot.free.length | 0] : state.barber;
@@ -401,6 +412,7 @@
       status: 'confirmed', created: new Date().toISOString()
     };
     const all = S.get('rb_bookings', []); all.push(booking); S.set('rb_bookings', all);
+    if (booking.code) { S.set('rb_promo_used', true); document.documentElement.classList.add('promo-used'); }
     S.set('rb_client', { name: booking.name, phone: booking.phone, email: booking.email });
     try { sessionStorage.removeItem('rb_code'); } catch (err) { /* ignore */ }
     state.conf = booking; state.step = 5; state.errors = {};
@@ -422,7 +434,7 @@
     mine.innerHTML = `<h2>Your upcoming bookings</h2>${list.map((b) => {
       const s = svcById(b.svc), br = barberById(b.barber), cancelled = b.status === 'cancelled';
       return `<div class="mb-item ${cancelled ? 'is-cancelled' : ''}">
-        <div class="mb-item__main"><strong>${esc(s.name)} with ${esc(br.first)}${cancelled ? ' — cancelled' : ''}</strong><span>${esc(T.long(b.date))} · ${T.fmt(b.start)} · Ref ${esc(b.ref)}</span></div>
+        <div class="mb-item__main"><strong>${esc(s.name)} with ${esc(br.first)}${cancelled ? ' (cancelled)' : ''}</strong><span>${esc(T.long(b.date))} · ${T.fmt(b.start)} · Ref ${esc(b.ref)}</span></div>
         ${cancelled ? '' : `<div class="mb-item__acts">
           <a class="btn btn--ghost btn--sm" href="${esc(RB.calendar.google(RB.calendar.event(b)))}" target="_blank" rel="noopener noreferrer">Google Calendar</a>
           ${RB.calendar.appleUrl(b) ? `<a class="btn btn--ghost btn--sm" href="${esc(RB.calendar.appleUrl(b))}">Apple Calendar</a>` : `<button type="button" class="btn btn--ghost btn--sm" data-ics="${esc(b.ref)}">Apple / .ics</button>`}
@@ -447,7 +459,7 @@
     if (t.dataset.goto) { if (state.step === 4) readForm(); go(Number(t.dataset.goto)); return; }
     if (t.hasAttribute('data-next')) { go(state.step + 1); return; }
     if (t.hasAttribute('data-back')) { if (state.step === 4) readForm(); go(state.step - 1); return; }
-    if (t.hasAttribute('data-ms-next')) {
+    if (t.hasAttribute('data-ms-next') || t.hasAttribute('data-sum-next')) {
       if (state.step === 4) { confirm(); } else go(state.step + 1);
       return;
     }
@@ -460,11 +472,12 @@
       const inp = $('#bk-code', app); if (inp) inp.value = c;
       const msg = $('#bk-code-msg', app);
       if (msg) { msg.textContent = state.codeMsg; msg.className = discount().amount ? 'field__ok' : 'field__err'; }
+      if (discount().amount) { S.set('rb_promo_used', true); document.documentElement.classList.add('promo-used'); }
       renderSummary(); return;
     }
     if (t.dataset.ics) {
       const b = S.get('rb_bookings', []).find((x) => x.ref === t.dataset.ics);
-      if (b) { RB.calendar.downloadIcs(RB.calendar.event(b), 'reinats-' + b.ref + '.ics'); RB.toast('Calendar file ready — open it to add the event'); }
+      if (b) { RB.calendar.downloadIcs(RB.calendar.event(b), 'reinats-' + b.ref + '.ics'); RB.toast('Calendar file ready. Open it to add the event'); }
       return;
     }
     if (t.dataset.cancel) {

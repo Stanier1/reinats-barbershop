@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Reinat's Barber Studio — design system
+   Reinat's Barber Studio: design system
    Ink ground, bone type, acid-lime action colour, coral for stickers only.
    ========================================================================== */
 :root {
@@ -49,7 +49,7 @@ body {
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
-/* Film grain over everything — subtle, never blocks clicks. */
+/* Film grain over everything: subtle, never blocks clicks. */
 body::after {
   content: '';
   position: fixed; inset: 0; z-index: 200; pointer-events: none; opacity: 0.06; mix-blend-mode: overlay;
@@ -304,9 +304,7 @@ main { overflow-x: clip; }
 .reel__meta { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 2; display: flex; flex-direction: column; gap: 4px; }
 .reel__handle { font-size: 12px; font-weight: 600; opacity: 0.85; }
 .reel__cap { font: 800 16px/1.1 var(--f-display); letter-spacing: -0.02em; }
-.reel__views { position: absolute; top: 10px; left: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 5px 9px; border-radius: var(--pill); background: rgba(12, 11, 10, 0.55); backdrop-filter: blur(6px); }
-.reel__play { position: absolute; top: 50%; left: 50%; z-index: 2; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: rgba(243, 238, 229, 0.18); backdrop-filter: blur(8px); display: grid; place-items: center; opacity: 0; transform: scale(0.8); transition: 0.25s var(--ease); }
-.reel:hover .reel__play, .reel:focus-visible .reel__play { opacity: 1; transform: none; }
+.reel__likes { position: absolute; top: 10px; left: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 5px 9px; border-radius: var(--pill); background: rgba(12, 11, 10, 0.55); backdrop-filter: blur(6px); }
 @media (max-width: 1100px) { .reels { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .reels { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } }
 
@@ -315,10 +313,10 @@ main { overflow-x: clip; }
 .review { flex: 0 0 min(86%, 380px); scroll-snap-align: start; margin: 0; padding: 26px; border-radius: var(--r); background: var(--ink-2); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 18px; }
 .review blockquote { margin: 0; font: 700 21px/1.3 var(--f-display); letter-spacing: -0.02em; }
 .review figcaption { margin-top: auto; display: flex; align-items: center; gap: 12px; font-size: 14px; }
-.review__avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; color: var(--ink); background: var(--lime); flex: none; }
+.review__avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font: 800 16px/1 var(--f-display); color: var(--ink); background: var(--lime); flex: none; }
 .review:nth-child(3n + 2) .review__avatar { background: var(--coral); }
 .review:nth-child(3n) .review__avatar { background: var(--bone); }
-.review figcaption span { color: var(--muted); display: block; font-size: 12.5px; }
+.review figcaption div span { color: var(--muted); display: block; font-size: 12.5px; }
 .rating-summary { display: flex; align-items: center; gap: 16px; }
 .rating-summary strong { font: 800 64px/0.9 var(--f-display); letter-spacing: -0.05em; }
 
@@ -421,9 +419,9 @@ main { overflow-x: clip; }
 .contact-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .contact-card { padding: 24px; border-radius: var(--r); background: var(--ink-2); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; text-decoration: none; transition: border-color 0.2s, transform 0.2s var(--ease); min-width: 0; }
 a.contact-card:hover { border-color: var(--lime); transform: translateY(-2px); }
-.contact-card small { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
-.contact-card strong { font: 700 20px/1.25 var(--f-display); letter-spacing: -0.02em; overflow-wrap: anywhere; }
-.contact-card span { color: var(--lime); font-size: 14px; font-weight: 600; margin-top: auto; }
+.contact-card > small { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.contact-card > strong { font: 700 20px/1.25 var(--f-display); letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.contact-card > span { color: var(--lime); font-size: 14px; font-weight: 600; margin-top: auto; }
 .contact-card--wide { grid-column: 1 / -1; }
 .hours--big { list-style: none; margin: 0; padding: 0; }
 .hours--big li { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 15.5px; }
@@ -697,4 +695,55 @@ body:has(.cta-band) .footer-cta { display: none; }
   .progress button { font-size: 11.5px; }
   .progress b { display: block; margin-bottom: 2px; }
   .tz-note { align-items: flex-start; }
+}
+
+/* ---------- Feedback round 2 ---------- */
+.btn--xl { min-height: 64px; padding: 18px 34px; font-size: 19px; }
+.reel__likes svg { color: var(--coral); }
+.reel__likes { gap: 6px; }
+/* Highlighter-pen marker behind a heading phrase */
+.hl { background: linear-gradient(transparent 58%, var(--lime) 58%, var(--lime) 92%, transparent 92%); -webkit-box-decoration-break: clone; box-decoration-break: clone; padding: 0 0.06em; }
+.section:not(.section--bone) .hl { background: linear-gradient(transparent 58%, rgba(210, 255, 77, 0.35) 58%, rgba(210, 255, 77, 0.35) 92%, transparent 92%); }
+/* Hero fits a laptop screen with the Book button in view */
+.hero__copy { gap: clamp(18px, 2.4vw, 28px); }
+@media (min-width: 901px) {
+  .display-xl { font-size: clamp(52px, min(9.6vw, 13.5vh), 148px); }
+  .hero { padding-top: clamp(16px, 3vh, 48px); }
+  .hero__media { min-height: min(64vh, 680px); }
+}
+@media (min-width: 901px) and (max-height: 820px) {
+  .hero .lead { font-size: 16.5px; }
+  .hero__stats { padding-top: 16px; }
+}
+/* Promo ribbon hides once the code has been used */
+html.promo-used .promo-bar { display: none; }
+/* Contact FAQ: call line sits under the question, smaller */
+.faq-call { display: flex; flex-direction: column; gap: 6px; max-width: 420px; }
+.faq-call strong { font: 700 clamp(18px, 1.6vw, 22px)/1.25 var(--f-display); color: var(--ink); letter-spacing: -0.02em; }
+.faq-call span { font-size: 15px; color: var(--muted-ink); }
+.faq-call a { color: var(--ink); font-weight: 700; }
+.hours-note { font-size: 13.5px; margin-top: 12px; color: var(--muted); line-height: 1.55; }
+.hours-note strong { color: var(--bone); }
+/* Booking: Continue lives under the appointment summary on desktop */
+.summary__nav { display: flex; flex-direction: column; gap: 8px; padding: 0 22px 20px; }
+.summary__nav .btn { width: 100%; justify-content: space-between; }
+.summary__nav .btn--ghost { justify-content: center; }
+@media (min-width: 1001px) { .booking__main > .nav-row { display: none; } }
+@media (max-width: 1000px) { .summary__nav { display: none; } }
+/* Story photo caption */
+.story-grid__media figcaption { position: absolute; left: 18px; bottom: 18px; }
+@media (min-width: 1001px) {
+  /* Pin the whole aside (the summary alone has no room to stick inside it) and keep it compact. */
+  .booking__aside { position: sticky; top: calc(var(--header-h) + 16px); }
+  .booking__aside .summary { position: static; }
+  .summary__head { padding: 14px 20px; }
+  .summary dl { padding: 2px 20px; }
+  .summary dl div { padding: 9px 0; }
+  .summary__total { padding: 12px 20px 14px; }
+  .summary__total strong { font-size: 32px; }
+  .summary__foot { padding: 10px 20px 14px; font-size: 12.5px; }
+}
+@media (min-width: 1001px) {
+  body[data-page='book'] .page-hero { padding-top: clamp(20px, 3vh, 40px); }
+  body[data-page='book'] .page-hero .display-l { font-size: clamp(44px, min(6vw, 11vh), 96px); }
 }

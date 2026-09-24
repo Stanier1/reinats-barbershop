@@ -119,6 +119,9 @@
   function init() {
     const page = document.body.dataset.page;
 
+    // The promo ribbon goes away once the code has been applied; skipping the offer keeps it.
+    if (store.get('rb_promo_used', false)) document.documentElement.classList.add('promo-used');
+
     // Header shadow on scroll
     const header = $('.site-header');
     const onScroll = () => header && header.classList.toggle('is-scrolled', window.scrollY > 8);
@@ -140,11 +143,11 @@
       const closeOffer = () => { closeLayer(offer); store.set('rb_offer_seen', true); };
       $$('[data-offer-close]', offer).forEach((b) => b.addEventListener('click', closeOffer));
       offer.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeOffer(); trap(e, offer); });
-      $('[data-offer-apply]', offer).addEventListener('click', () => { store.set('rb_offer_seen', true); try { sessionStorage.setItem('rb_code', RB.promo.code); } catch (e) { /* ignore */ } });
+      $('[data-offer-apply]', offer).addEventListener('click', () => { store.set('rb_offer_seen', true); store.set('rb_promo_used', true); document.documentElement.classList.add('promo-used'); try { sessionStorage.setItem('rb_code', RB.promo.code); } catch (e) { /* ignore */ } });
       $('[data-copy-code]', offer).addEventListener('click', async (e) => {
         const ok = await copy(RB.promo.code);
         e.currentTarget.textContent = ok ? 'Copied ✓' : 'Select & copy';
-        toast(ok ? 'Code ' + RB.promo.code + ' copied' : 'Copy failed — the code is ' + RB.promo.code);
+        toast(ok ? 'Code ' + RB.promo.code + ' copied' : 'Copy failed. Your code is ' + RB.promo.code);
       });
       $$('[data-open-offer]').forEach((b) => b.addEventListener('click', () => { if (menu && !menu.hidden) closeLayer(menu); openLayer(offer); }));
       if (!store.get('rb_offer_seen', false) && !/[?&]nopopup/.test(location.search)) {

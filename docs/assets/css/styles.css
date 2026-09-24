@@ -786,3 +786,6 @@ html.promo-used .promo-bar { display: none; }
 .perks { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; max-width: 520px; }
 .perks li { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 10px 10px; border-radius: var(--pill); background: var(--lime); color: var(--ink); font: 700 15px/1 var(--f-body); }
 .perks__ic { width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: var(--lime); display: grid; place-items: center; flex: none; }
+
+.last-note { margin-top: 20px; padding: 14px 16px; border-radius: var(--r-sm); background: var(--ink-2); border: 1px solid var(--line); font-size: 14px; line-height: 1.55; color: var(--muted); }
+.last-note strong { color: var(--bone); }

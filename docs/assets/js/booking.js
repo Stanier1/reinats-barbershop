@@ -163,7 +163,19 @@
       <p class="panel-sub">${esc(svc().name)} · ${svc().min} min · ${state.barber === 'any' ? 'any barber' : 'with ' + esc(barberById(state.barber).first)}</p>
       <div class="day-strip" role="group" aria-label="Available days">${days.join('')}</div>
       ${state.date ? `<p class="tz-note">${ic.globe}<span>${esc(T.long(state.date))} · times in ${esc(RB.shop.tzLabel)}${esc(tzExtra)}</span></p>` : ''}
-      ${body}`;
+      ${body}
+      ${lastStartNote()}`;
+  }
+
+  // Explains why late slots are missing: the service has to finish before closing.
+  function lastStartNote() {
+    const sv = svc(); if (!sv || !state.date) return '';
+    const hrs = RB.hours[T.dow(state.date)]; if (!hrs) return '';
+    let last = null;
+    for (let t = hrs[0]; t + sv.min <= hrs[1]; t += A.STEP) last = t;
+    if (last == null) return '';
+    const day = T.fmtDate(state.date, { weekday: 'long' });
+    return `<p class="last-note"><strong>Last appointments:</strong> we only show times that let your ${esc(sv.name)} (${sv.min} min) finish before we close at ${esc(T.fmtShort(hrs[1]))}. The latest start on ${esc(day)} is <strong>${esc(T.fmt(last))}</strong>.</p>`;
   }
 
   function field(id, label, type, value, opts = {}) {

@@ -781,3 +781,8 @@ html.promo-used .promo-bar { display: none; }
   .barber-minis { grid-template-columns: 1fr; }
 }
 @media (min-width: 901px) and (max-width: 1100px) { .barber-minis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* About: studio perks as highlighted pills */
+.perks { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; max-width: 520px; }
+.perks li { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 10px 10px; border-radius: var(--pill); background: var(--lime); color: var(--ink); font: 700 15px/1 var(--f-body); }
+.perks__ic { width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: var(--lime); display: grid; place-items: center; flex: none; }

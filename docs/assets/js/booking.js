@@ -168,7 +168,7 @@
     const err = state.errors[id];
     return `
       <div class="field ${opts.span ? 'span-2' : ''}">
-        <label for="bk-${id}">${label}${opts.optional ? ' <span class="opt">(optional)</span>' : ''}</label>
+        <label for="bk-${id}">${label}${opts.optional ? ' <span class="field__opt">(optional)</span>' : ''}</label>
         ${type === 'textarea'
           ? `<textarea id="bk-${id}" name="${id}" class="input" placeholder="${esc(opts.ph || '')}" maxlength="400">${esc(value)}</textarea>`
           : `<input id="bk-${id}" name="${id}" class="input" type="${type}" value="${esc(value)}" ${opts.ac ? `autocomplete="${opts.ac}"` : ''} ${opts.im ? `inputmode="${opts.im}"` : ''} placeholder="${esc(opts.ph || '')}" ${opts.optional ? '' : 'required'} aria-invalid="${!!err}" aria-describedby="bk-${id}-err">`}
@@ -186,7 +186,7 @@
         ${field('email', 'Email', 'email', f.email, { ac: 'email', im: 'email', ph: 'you@example.com', span: true })}
         ${field('notes', 'Anything we should know?', 'textarea', f.notes, { optional: true, span: true, ph: 'Style reference, sensitive skin, first visit…' })}
         <div class="field span-2">
-          <label for="bk-code">Promo code <span class="opt">(optional)</span></label>
+          <label for="bk-code">Promo code <span class="field__opt">(optional)</span></label>
           <div class="promo-row">
             <input id="bk-code" name="code" class="input" value="${esc(f.code)}" placeholder="FIRSTFADE" autocomplete="off" autocapitalize="characters" aria-describedby="bk-code-msg">
             <button type="button" class="btn btn--ghost" data-apply-code>Apply</button>
@@ -400,8 +400,9 @@
     S.set('rb_client', { name: booking.name, phone: booking.phone, email: booking.email });
     try { sessionStorage.removeItem('rb_code'); } catch (err) { /* ignore */ }
     state.conf = booking; state.step = 5; state.errors = {};
-    render(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    render(false);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    const h = $('.panel-title', app); if (h) h.focus({ preventScroll: true });
   }
 
   /* ---------- Your bookings (this device) ---------- */

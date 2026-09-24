@@ -440,7 +440,7 @@ a.contact-card:hover { border-color: var(--lime); transform: translateY(-2px); }
 /* ---------- Forms ---------- */
 .field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .field label { font-size: 14px; font-weight: 600; }
-.field label .opt { color: var(--muted); font-weight: 400; }
+.field label .field__opt { color: var(--muted); font-weight: 400; }
 .input {
   width: 100%; min-height: 52px; padding: 13px 16px; border-radius: var(--r-sm); background: var(--ink-2); border: 1.5px solid var(--line-2);
   color: var(--bone); transition: border-color 0.15s, box-shadow 0.15s; font-size: 16px;

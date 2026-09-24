@@ -757,7 +757,7 @@ html.promo-used .promo-bar { display: none; }
 .barber-feature { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); border-radius: var(--r-lg); overflow: hidden; background: var(--ink-2); border: 1px solid var(--lime); box-shadow: 0 0 0 3px rgba(210, 255, 77, 0.18); animation: featureIn 0.45s var(--ease); }
 @keyframes featureIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 .barber-feature__media { position: relative; min-height: 520px; background: var(--ink-3); }
-.barber-feature__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+.barber-feature__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
 .barber-feature__media .sticker { position: absolute; top: 18px; left: 18px; }
 .barber-feature__body { padding: clamp(24px, 4vw, 48px); display: flex; flex-direction: column; justify-content: center; gap: 16px; }
 .barber-feature__name { font-size: clamp(36px, 4.4vw, 60px); line-height: 0.95; outline: none; }

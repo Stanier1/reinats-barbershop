@@ -3,263 +3,180 @@
 <html lang="en">
 <head>
 <!--@head-->
+<link rel="stylesheet" href="assets/css/xp.css">
+<script>(function () { try { var d = document.documentElement, rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches; if (!rm && 'WebGLRenderingContext' in window) d.classList.add('xp-live'); } catch (e) {} })();</script>
 </head>
-<body data-page="home">
+<body data-page="home" class="xp-page">
 <!--@header-->
 
-<main id="main">
-  <section class="hero">
-    <div class="container hero__grid">
-      <div class="hero__copy">
-        <div class="hero__tags">
-          <span class="sticker sticker--lime"><span class="stars" style="color:var(--ink)">★</span> 4.9 · 860+ Google reviews</span>
-          <span class="sticker sticker--ghost">Borrowdale, Harare</span>
-        </div>
-        <h1 class="display-xl">Fresh fades<br><em>Good energy</em><br>Zero wait</h1>
-        <div class="hero__actions">
-          <a class="btn btn--lime btn--xl" href="book.html" data-hero-book>Book your chair <span aria-hidden="true">→</span></a>
-          <a class="btn btn--ghost btn--xl" href="services.html">See prices</a>
-        </div>
-        <p class="lead">Skin fades, sponge twists, beard sculpts and straight-razor shaves from four barbers who start on time, every time. Book in a minute, add it to your calendar, walk straight into the chair.</p>
-        <div class="hero__stats">
-          <div><strong>12k+</strong><span>cuts a year</span></div>
-          <div><strong>4</strong><span>specialist barbers</span></div>
-          <div><strong>$15</strong><span>signature cut</span></div>
+<div class="xp-leader" aria-hidden="true">
+  <div class="xp-leader__ring"><span class="xp-leader__sweep"></span><span class="xp-leader__n"></span></div>
+  <p class="xp-leader__cap">Reinat’s Barber Studio presents</p>
+</div>
+<div class="xp-dim" data-xp-dim aria-hidden="true"></div>
+
+<main id="main" class="xp">
+  <div class="xp-track" data-xp-track>
+
+    <section class="xp-scene xp-scene--open" data-scene="0" data-text="open" aria-labelledby="xp-title">
+      <img class="xp-media" src="assets/img/hero.jpg" alt="" width="1200" height="1500" loading="lazy">
+      <div class="xp-card">
+        <p class="xp-kicker">Reinat’s Barber Studio presents</p>
+        <h1 id="xp-title" class="xp-title"><span class="visually-hidden">Reinat’s Barber Studio, Borrowdale, Harare: </span><span class="xp-title__big">The Cut</span></h1>
+        <p class="xp-sub">A short film in nine scenes about fresh fades, good energy and zero waiting. Shot on Kingsmead Road, Borrowdale.</p>
+        <div class="xp-actions">
+          <a class="btn btn--lime btn--lg" href="book.html" data-hero-book>Book your chair <span aria-hidden="true">→</span></a>
+          <button type="button" class="btn btn--ghost btn--lg xp-roll" data-xp-go="1">Roll film <span aria-hidden="true">↓</span></button>
         </div>
       </div>
+    </section>
 
-      <div class="hero__media">
-        <img src="assets/img/hero.jpg" alt="Reinat’s barber shaping a textured sponge-twist top with clippers" width="1200" height="1500" fetchpriority="high">
-        <span class="hero__float hero__rating sticker sticker--coral sticker--tilt">Walk-ins welcome</span>
-        <div class="hero__float spin-badge" aria-hidden="true">
-          <svg viewBox="0 0 120 120"><defs><path id="circ" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><circle cx="60" cy="60" r="60" fill="#4d7cff"/><text font-family="Inter, sans-serif" font-size="11.5" font-weight="700" fill="#05060a"><textPath href="#circ" textLength="286" lengthAdjust="spacing">BOOK ONLINE • ADD TO CALENDAR •</textPath></text></svg>
-          <span>↗</span>
+    <section class="xp-scene" data-scene="1" data-text="right" aria-labelledby="sc1">
+      <img class="xp-media" src="assets/img/story-vintage.jpg" alt="" width="1200" height="900" loading="lazy">
+      <div class="xp-card">
+        <p class="xp-slate"><span>Scene 01</span> The origin</p>
+        <h2 id="sc1" class="xp-h">It started under <em>a tree in Mbare</em></h2>
+        <p class="xp-p">Gogo Reinat cut hair for half her street with one pair of clippers and a wooden stool. In 2018 her grandson opened this studio with two chairs and one rule: respect people’s time.</p>
+        <a class="xp-link" href="about.html">Read our story <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section class="xp-scene" data-scene="2" data-text="left" aria-labelledby="sc2">
+      <img class="xp-media" src="assets/film/poster.jpg" alt="" width="1440" height="810" loading="lazy">
+      <div class="xp-card">
+        <p class="xp-slate"><span>Scene 02</span> The chair</p>
+        <h2 id="sc2" class="xp-h">Take a seat <em>we start on time</em></h2>
+        <ul class="xp-stats">
+          <li><strong>12k+</strong><span>cuts a year</span></li>
+          <li><strong>4.9★</strong><span>860+ Google reviews</span></li>
+          <li><strong>4</strong><span>specialist barbers</span></li>
+        </ul>
+        <p class="xp-p">Every appointment starts with a consult and ends with a hot towel and a mirror check. Pay in the shop by cash, card or EcoCash.</p>
+      </div>
+    </section>
+
+    <section class="xp-scene" data-scene="3" data-text="right" aria-labelledby="sc3">
+      <img class="xp-media" src="assets/img/svc-fade.jpg" alt="" width="800" height="1000" loading="lazy">
+      <div class="xp-card">
+        <p class="xp-slate"><span>Scene 03</span> The skin fade</p>
+        <h2 id="sc3" class="xp-h">Skin Fade <em>bald to blended</em></h2>
+        <p class="xp-meta"><strong>$18</strong><span>45 min</span></p>
+        <p class="xp-p">As low or high as you like, blended by hand and finished with a razor line-up.</p>
+        <a class="btn btn--lime" href="book.html?service=skin-fade">Book a skin fade <span aria-hidden="true">→</span></a>
+        <p class="xp-hint">Drag the clippers to spin them</p>
+      </div>
+    </section>
+
+    <section class="xp-scene" data-scene="4" data-text="left" aria-labelledby="sc4">
+      <img class="xp-media" src="assets/img/svc-style.jpg" alt="" width="800" height="1000" loading="lazy">
+      <div class="xp-card">
+        <p class="xp-slate"><span>Scene 04</span> The signature</p>
+        <h2 id="sc4" class="xp-h">Signature Cut <em>the full ritual</em></h2>
+        <p class="xp-meta"><strong>$15</strong><span>45 min</span></p>
+        <p class="xp-p">Consultation, clipper and scissor cut, wash, style and a hot towel finish.</p>
+        <a class="btn btn--lime" href="book.html?service=signature">Book a signature cut <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section class="xp-scene" data-scene="5" data-text="right" aria-labelledby="sc5">
+      <img class="xp-media" src="assets/img/svc-beard.jpg" alt="" width="800" height="1000" loading="lazy">
+      <div class="xp-card">
+        <p class="xp-slate"><span>Scene 05</span> The beard</p>
+        <h2 id="sc5" class="xp-h">Beard Trim &amp; Line <em>sharp from every angle</em></h2>
+        <p class="xp-meta"><strong>$10</strong><span>30 min</span></p>
+        <p class="xp-p">Clipper and scissor shaping, razor-sharp cheek and neck lines, finished with our own beard oil.</p>
+        <a class="btn btn--lime" href="book.html?service=beard-trim">Book a beard trim <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section class="xp-scene" data-scene="6" data-text="left" aria-labelledby="sc6">
+      <img class="xp-media" src="assets/img/svc-shave.jpg" alt="" width="800" height="1000" loading="lazy">
+      <div class="xp-card">
+        <p class="xp-slate"><span>Scene 06</span> The shave</p>
+        <h2 id="sc6" class="xp-h">Hot Towel Shave <em>three towels, one razor</em></h2>
+        <p class="xp-meta"><strong>$15</strong><span>40 min</span></p>
+        <p class="xp-p">A traditional straight-razor shave with three hot towels and a cold finish.</p>
+        <div class="xp-actions">
+          <a class="btn btn--lime" href="book.html?service=hot-towel-shave">Book a shave <span aria-hidden="true">→</span></a>
+          <a class="xp-link" href="services.html">All 17 services <span aria-hidden="true">→</span></a>
         </div>
-        <a class="hero__float next-free" href="book.html" data-next-free hidden>
+      </div>
+    </section>
+
+    <section class="xp-scene" data-scene="7" data-text="bottom" aria-labelledby="sc7">
+      <div class="xp-card">
+        <p class="xp-slate"><span>Scene 07</span> The crew</p>
+        <h2 id="sc7" class="xp-h">Pick your barber <em>or let us</em></h2>
+        <ul class="xp-crew">
+          <li><a href="about.html#tinashe"><img class="xp-media" src="assets/img/barber-tinashe.jpg" alt="" width="800" height="1000" loading="lazy"><strong>Tinashe</strong><span>Founder · Fades</span></a></li>
+          <li><a href="about.html#kuda"><img class="xp-media" src="assets/img/barber-kuda.jpg" alt="" width="800" height="1000" loading="lazy"><strong>Kuda</strong><span>Tapers · Hair art</span></a></li>
+          <li><a href="about.html#rudo"><img class="xp-media" src="assets/img/barber-rudo.jpg" alt="" width="800" height="1000" loading="lazy"><strong>Rudo</strong><span>Texture · Kids</span></a></li>
+          <li><a href="about.html#farai"><img class="xp-media" src="assets/img/barber-farai.jpg" alt="" width="800" height="1000" loading="lazy"><strong>Farai</strong><span>Shaves · Beards</span></a></li>
+        </ul>
+        <a class="xp-link" href="book.html">Or take the first free chair <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section class="xp-scene" data-scene="8" data-text="left" aria-labelledby="sc8">
+      <img class="xp-media" src="assets/img/reel-3.jpg" alt="" width="540" height="960" loading="lazy">
+      <div class="xp-card">
+        <p class="xp-slate"><span>Scene 08</span> The mirror</p>
+        <h2 id="sc8" class="xp-h">The group chat <em>agrees</em></h2>
+        <p class="xp-rating"><strong>4.9</strong><span class="stars" aria-label="4.9 out of 5 stars">★★★★★</span><span>860+ reviews on Google</span></p>
+        <div class="xp-quotes">
+          <figure><blockquote>“Cleanest fade I’ve had in Harare and they actually start on time. Booked on my lunch break.”</blockquote><figcaption>Tatenda M. · Skin Fade</figcaption></figure>
+          <figure><blockquote>“Farai’s hot towel shave is a whole experience. Walked out feeling like a new man.”</blockquote><figcaption>Brian K. · Hot Towel Shave</figcaption></figure>
+          <figure><blockquote>“Kuda freehanded a design from a screenshot. Got stopped three times that weekend.”</blockquote><figcaption>Panashe D. · Hair Art</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="xp-scene xp-scene--finale" data-scene="9" data-text="left" aria-labelledby="sc9">
+      <img class="xp-media" src="assets/img/reel-4.jpg" alt="" width="540" height="960" loading="lazy">
+      <div class="xp-card">
+        <p class="xp-slate"><span>Scene 09</span> Your chair</p>
+        <h2 id="sc9" class="xp-h">Your chair <em>is waiting</em></h2>
+        <p class="xp-p">Most barbers have same-day openings. Book in a minute, then add it to your calendar in one tap.</p>
+        <a class="next-free xp-next" href="book.html" data-next-free hidden>
           <span class="next-free__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
           <span><small>Next free chair</small><strong data-next-free-text>Today</strong></span>
           <span class="next-free__go">Grab it →</span>
         </a>
-      </div>
-    </div>
-  </section>
-
-  <section class="film" data-film aria-labelledby="film-title">
-    <div class="film__stage">
-      <div class="film__frame">
-        <img class="film__poster" src="assets/film/poster.jpg" alt="A barber shapes a client’s beard in the chair while the next client waits with a basketball" width="1440" height="810" loading="lazy">
-        <canvas class="film__canvas" data-film-canvas aria-hidden="true"></canvas>
-        <div class="film__shade" aria-hidden="true"></div>
-      </div>
-      <div class="film__copy container">
-        <span class="eyebrow film__eyebrow">Inside the studio · Kingsmead Road</span>
-        <h2 id="film-title" class="visually-hidden">Inside the studio</h2>
-        <ol class="film__lines">
-          <li class="film__line" data-film-line><span>Every cut starts</span> <em>with a conversation</em></li>
-          <li class="film__line" data-film-line><span>Then the chair</span> <em>goes quiet</em></li>
-          <li class="film__line" data-film-line><span>You leave sharper</span> <em>than you came</em></li>
-        </ol>
-        <div class="film__foot">
-          <a class="btn btn--lime btn--lg" href="book.html">Book your chair <span aria-hidden="true">→</span></a>
-          <span class="film__time" aria-hidden="true"><span data-film-tc>00:00</span> / 00:10</span>
+        <div class="xp-actions">
+          <a class="btn btn--lime btn--lg" href="book.html">Book now <span aria-hidden="true">→</span></a>
+          <a class="btn btn--ghost btn--lg" href="contact.html">Find us</a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee__track">
-      <div class="marquee__row">
-        <span class="marquee__item">Skin fades</span><span class="marquee__item"><i>sponge twists</i></span><span class="marquee__item">Beard sculpts</span><span class="marquee__item"><i>hot towel shaves</i></span><span class="marquee__item">Kids cuts</span><span class="marquee__item"><i>hair art</i></span><span class="marquee__item">Open Mon – Sat</span>
-      </div>
-      <div class="marquee__row">
-        <span class="marquee__item">Skin fades</span><span class="marquee__item"><i>sponge twists</i></span><span class="marquee__item">Beard sculpts</span><span class="marquee__item"><i>hot towel shaves</i></span><span class="marquee__item">Kids cuts</span><span class="marquee__item"><i>hair art</i></span><span class="marquee__item">Open Mon – Sat</span>
-      </div>
-    </div>
   </div>
 
-  <section class="pole-story" data-pole-story aria-labelledby="pole-title">
-    <div class="container pole-story__inner">
-      <div class="pole-story__visual" aria-hidden="true">
-        <canvas class="pole-canvas" data-pole-canvas></canvas>
-        <div class="pole-fallback"><span></span></div>
-      </div>
-      <div class="pole-story__text">
-        <span class="eyebrow">The Reinat’s way</span>
-        <h2 id="pole-title" class="visually-hidden">The Reinat’s way</h2>
-        <ol class="chapters">
-          <li class="chapter" data-chapter>
-            <span class="chapter__n">01</span>
-            <h3 class="chapter__title">From Gogo’s veranda <em>to Kingsmead Road</em></h3>
-            <p>Reinat Moyo cut hair for half her street in Mbare. Her grandson opened the studio in 2018 with two chairs and one rule: respect people’s time.</p>
-          </li>
-          <li class="chapter" data-chapter>
-            <span class="chapter__n">02</span>
-            <h3 class="chapter__title">12,000 cuts a year <em>and counting</em></h3>
-            <p>Four barbers, one playlist and every hair type. Skin fades, sponge twists, beard sculpts and straight-razor shaves.</p>
-          </li>
-          <li class="chapter" data-chapter>
-            <span class="chapter__n">03</span>
-            <h3 class="chapter__title">On time <em>every time</em></h3>
-            <p>Book in a minute, add it to your calendar and walk straight into the chair. If we keep you waiting, your next line-up is on us.</p>
-            <a class="btn btn--lime" href="book.html">Book your chair <span aria-hidden="true">→</span></a>
-          </li>
-        </ol>
-        <div class="pole-progress" aria-hidden="true"><span data-pole-progress></span></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="crew-title">
-    <div class="container">
-      <div class="section-head reveal">
-        <div>
-          <span class="eyebrow">The crew</span>
-          <h2 id="crew-title" class="display-m">Pick your barber. <em>Or let us</em></h2>
-        </div>
-        <p class="lead">Tap a face to see their work and book straight into their chair.</p>
-      </div>
-      <div class="stories reveal">
-        <a class="story" href="about.html#tinashe"><span class="story__ring"><img src="assets/img/barber-tinashe.jpg" alt="" width="800" height="1000" loading="lazy"></span><span class="story__name">Tinashe</span><span class="story__role">Founder · Fades</span></a>
-        <a class="story" href="about.html#kuda"><span class="story__ring"><img src="assets/img/barber-kuda.jpg" alt="" width="800" height="1000" loading="lazy"></span><span class="story__name">Kuda</span><span class="story__role">Tapers · Hair art</span></a>
-        <a class="story" href="about.html#rudo"><span class="story__ring"><img src="assets/img/barber-rudo.jpg" alt="" width="800" height="1000" loading="lazy"></span><span class="story__name">Rudo</span><span class="story__role">Texture · Kids</span></a>
-        <a class="story" href="about.html#farai"><span class="story__ring"><img src="assets/img/barber-farai.jpg" alt="" width="800" height="1000" loading="lazy"></span><span class="story__name">Farai</span><span class="story__role">Shaves · Beards</span></a>
-        <a class="story story--book" href="book.html"><span class="story__ring"><span aria-hidden="true">+</span></span><span class="story__name">First free</span><span class="story__role">Soonest chair</span></a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--ink-2 hscroll" data-hscroll aria-labelledby="popular-title">
-    <div class="container">
-      <div class="section-head reveal">
-        <div>
-          <span class="eyebrow">Most booked</span>
-          <h2 id="popular-title" class="display-m">The regulars</h2>
-        </div>
-        <div class="hscroll__head"><span class="hscroll__hint" aria-hidden="true">Scroll ⟶</span><a class="btn btn--ghost" href="services.html">Full menu &amp; prices →</a></div>
-      </div>
-      <div class="card-grid reveal">
-        <article class="svc-card">
-          <div class="svc-card__media"><img src="assets/img/svc-fade.jpg" alt="Clean skin fade on dark hair" width="800" height="1000" loading="lazy"><span class="svc-card__price sticker sticker--lime">$18</span></div>
-          <div class="svc-card__body"><h3>Skin Fade</h3><p>Bald to blended, as low or high as you like, finished with a razor line-up.</p>
-            <div class="svc-card__foot"><span>45 min</span><a class="btn btn--lime btn--sm" href="book.html?service=skin-fade">Book →</a></div></div>
-        </article>
-        <article class="svc-card">
-          <div class="svc-card__media"><img src="assets/img/svc-style.jpg" alt="Barber finishing a styled cut with hairspray" width="800" height="1000" loading="lazy"><span class="svc-card__price sticker sticker--lime">$15</span></div>
-          <div class="svc-card__body"><h3>Signature Cut</h3><p>Consultation, clipper and scissor cut, wash, style and a hot towel finish.</p>
-            <div class="svc-card__foot"><span>45 min</span><a class="btn btn--lime btn--sm" href="book.html?service=signature">Book →</a></div></div>
-        </article>
-        <article class="svc-card">
-          <div class="svc-card__media"><img src="assets/img/svc-beard.jpg" alt="Barber shaping a full beard with scissors" width="800" height="1000" loading="lazy"><span class="svc-card__price sticker sticker--lime">$10</span></div>
-          <div class="svc-card__body"><h3>Beard Trim &amp; Line</h3><p>Clipper and scissor shaping, razor-sharp lines and beard oil to finish.</p>
-            <div class="svc-card__foot"><span>30 min</span><a class="btn btn--lime btn--sm" href="book.html?service=beard-trim">Book →</a></div></div>
-        </article>
-        <article class="svc-card">
-          <div class="svc-card__media"><img src="assets/img/svc-shave.jpg" alt="Straight razor hot towel shave" width="800" height="1000" loading="lazy"><span class="svc-card__price sticker sticker--lime">$15</span></div>
-          <div class="svc-card__body"><h3>Hot Towel Shave</h3><p>Traditional straight-razor shave with three hot towels and a cold finish.</p>
-            <div class="svc-card__foot"><span>40 min</span><a class="btn btn--lime btn--sm" href="book.html?service=hot-towel-shave">Book →</a></div></div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--bone" aria-labelledby="how-title">
-    <div class="container">
-      <div class="section-head reveal">
-        <div>
-          <span class="eyebrow">How it works</span>
-          <h2 id="how-title" class="display-m"><span class="hl">Booked before your<br>coffee cools</span></h2>
-        </div>
-        <p class="lead">No calls, no DMs, no waiting on a bench. Three taps and you are in the chair.</p>
-      </div>
-      <div class="steps reveal">
-        <div class="step">
-          <span class="step__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/></svg></span>
-          <span class="step__n">01</span><h3>Pick a service &amp; barber</h3><p>Choose from 17 services. Go with a favourite or grab the first free chair.</p>
-        </div>
-        <div class="step">
-          <span class="step__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M16 2v4M8 2v4M3 10h18M9 15l2 2 4-4"/></svg></span>
-          <span class="step__n">02</span><h3>Lock your time</h3><p>Live open slots for the next three weeks. Confirm and add it to Google or Apple Calendar in one tap.</p>
-        </div>
-        <div class="step">
-          <span class="step__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-          <span class="step__n">03</span><h3>Walk in, sit down</h3><p>We start on time. Pay in the shop by cash, card or EcoCash. Free line-up within 7 days.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="reels-title">
-    <div class="container">
-      <div class="section-head reveal">
-        <div>
-          <span class="eyebrow">@reinats.studio</span>
-          <h2 id="reels-title" class="display-m">Fresh off <em>the chair</em></h2>
-        </div>
-        <a class="btn btn--ghost" href="https://www.instagram.com/reinats.studio/" target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/></svg>
-          Follow on Instagram
-        </a>
-      </div>
-      <div class="reels reveal">
-        <button type="button" class="reel" data-reel data-img="assets/img/reel-1.jpg" data-caption="Skin fade, razor line-up" data-handle="@tinashe.cuts" data-service="skin-fade"><img src="assets/img/reel-1.jpg" alt="Side profile of a fresh skin fade with a razor line-up" width="540" height="960" loading="lazy"><span class="reel__likes" aria-label="18.2K likes"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.4 2.3 4.5 6 4.5c2.2 0 3.6 1.2 4.5 2.6.3.5.9.5 1.2 0 .9-1.4 2.3-2.6 4.5-2.6 3.7 0 5.6 3.9 4 7.2C19.5 16.4 12 21 12 21Z"/></svg>18.2K</span><span class="reel__meta"><span class="reel__handle">@tinashe.cuts</span><span class="reel__cap">Skin fade, razor line-up</span></span></button>
-        <button type="button" class="reel" data-reel data-img="assets/img/reel-2.jpg" data-caption="Low cut, clean taper" data-handle="@kuda.fades" data-service="signature"><img src="assets/img/reel-2.jpg" alt="Client showing off a low cut with a clean taper" width="540" height="960" loading="lazy"><span class="reel__likes" aria-label="9.4K likes"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.4 2.3 4.5 6 4.5c2.2 0 3.6 1.2 4.5 2.6.3.5.9.5 1.2 0 .9-1.4 2.3-2.6 4.5-2.6 3.7 0 5.6 3.9 4 7.2C19.5 16.4 12 21 12 21Z"/></svg>9.4K</span><span class="reel__meta"><span class="reel__handle">@kuda.fades</span><span class="reel__cap">Low cut, clean taper</span></span></button>
-        <button type="button" class="reel" data-reel data-img="assets/img/reel-3.jpg" data-caption="Beard sculpt, sharp cheek line" data-handle="@farai.shaves" data-service="beard-sculpt"><img src="assets/img/reel-3.jpg" alt="Black and white portrait of a sculpted full beard" width="540" height="960" loading="lazy"><span class="reel__likes" aria-label="12.7K likes"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.4 2.3 4.5 6 4.5c2.2 0 3.6 1.2 4.5 2.6.3.5.9.5 1.2 0 .9-1.4 2.3-2.6 4.5-2.6 3.7 0 5.6 3.9 4 7.2C19.5 16.4 12 21 12 21Z"/></svg>12.7K</span><span class="reel__meta"><span class="reel__handle">@farai.shaves</span><span class="reel__cap">Beard sculpt, sharp cheek line</span></span></button>
-        <button type="button" class="reel" data-reel data-img="assets/img/reel-4.jpg" data-caption="360 waves and beard trim" data-handle="@rudo.texture" data-service="cut-beard"><img src="assets/img/reel-4.jpg" alt="Client with 360 waves and a trimmed beard" width="540" height="960" loading="lazy"><span class="reel__likes" aria-label="21.3K likes"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.4 2.3 4.5 6 4.5c2.2 0 3.6 1.2 4.5 2.6.3.5.9.5 1.2 0 .9-1.4 2.3-2.6 4.5-2.6 3.7 0 5.6 3.9 4 7.2C19.5 16.4 12 21 12 21Z"/></svg>21.3K</span><span class="reel__meta"><span class="reel__handle">@rudo.texture</span><span class="reel__cap">360 waves and beard trim</span></span></button>
-        <button type="button" class="reel" data-reel data-img="assets/img/reel-5.jpg" data-caption="Full beard, hot towel finish" data-handle="@farai.shaves" data-service="hot-towel-shave"><img src="assets/img/reel-5.jpg" alt="Side profile of a full beard after a hot towel shave" width="540" height="960" loading="lazy"><span class="reel__likes" aria-label="7.9K likes"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.4 2.3 4.5 6 4.5c2.2 0 3.6 1.2 4.5 2.6.3.5.9.5 1.2 0 .9-1.4 2.3-2.6 4.5-2.6 3.7 0 5.6 3.9 4 7.2C19.5 16.4 12 21 12 21Z"/></svg>7.9K</span><span class="reel__meta"><span class="reel__handle">@farai.shaves</span><span class="reel__cap">Full beard, hot towel finish</span></span></button>
-        <button type="button" class="reel" data-reel data-img="assets/img/reel-6.jpg" data-caption="High top, hard part" data-handle="@kuda.fades" data-service="hair-art"><img src="assets/img/reel-6.jpg" alt="Smiling client with a high top and a hard part" width="540" height="960" loading="lazy"><span class="reel__likes" aria-label="15.6K likes"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.4 2.3 4.5 6 4.5c2.2 0 3.6 1.2 4.5 2.6.3.5.9.5 1.2 0 .9-1.4 2.3-2.6 4.5-2.6 3.7 0 5.6 3.9 4 7.2C19.5 16.4 12 21 12 21Z"/></svg>15.6K</span><span class="reel__meta"><span class="reel__handle">@kuda.fades</span><span class="reel__cap">High top, hard part</span></span></button>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--ink-2" aria-labelledby="reviews-title">
-    <div class="container">
-      <div class="section-head reveal">
-        <div>
-          <span class="eyebrow">Reviews</span>
-          <h2 id="reviews-title" class="display-m">The group chat<br><em>agrees</em></h2>
-        </div>
-        <div class="rating-summary"><strong>4.9</strong><div><div class="stars" aria-label="4.9 out of 5 stars">★★★★★</div><span class="muted">860+ reviews on Google</span></div></div>
-      </div>
-      <div class="reviews reveal" tabindex="0" aria-label="Customer reviews, scroll sideways for more">
-        <figure class="review"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>“Cleanest fade I’ve had in Harare and they actually start on time. Booked on my lunch break.”</blockquote><figcaption><span class="review__avatar" aria-hidden="true">T</span><div><strong>Tatenda M.</strong><span>Google review · Skin Fade</span></div></figcaption></figure>
-        <figure class="review"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>“Rudo was so patient with my son’s first haircut. He now asks when we’re going back.”</blockquote><figcaption><span class="review__avatar" aria-hidden="true">N</span><div><strong>Nyasha C.</strong><span>Google review · Kids Cut</span></div></figcaption></figure>
-        <figure class="review"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>“Farai’s hot towel shave is a whole experience. Walked out feeling like a new man.”</blockquote><figcaption><span class="review__avatar" aria-hidden="true">B</span><div><strong>Brian K.</strong><span>Google review · Hot Towel Shave</span></div></figcaption></figure>
-        <figure class="review"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>“Kuda freehanded a design from a screenshot. Got stopped three times that weekend.”</blockquote><figcaption><span class="review__avatar" aria-hidden="true">P</span><div><strong>Panashe D.</strong><span>Google review · Hair Art</span></div></figcaption></figure>
-        <figure class="review"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>“Booked the Groom’s Day for my wedding. Calendar invite, reminder, zero stress. Five stars.”</blockquote><figcaption><span class="review__avatar" aria-hidden="true">M</span><div><strong>Munashe R.</strong><span>Google review · Groom’s Day</span></div></figcaption></figure>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <div class="cta-band reveal">
-        <h2>Your chair<br><em>is waiting</em></h2>
-        <div>
-          <p>Most barbers have same-day openings. Book online, then add it to your calendar in one tap.</p>
-          <a class="btn btn--ink btn--lg" href="book.html">Book now <span aria-hidden="true">→</span></a>
-        </div>
-      </div>
-    </div>
+  <section class="xp-credits" aria-labelledby="credits-title">
+    <p class="xp-kicker">The end? Not quite</p>
+    <h2 id="credits-title" class="visually-hidden">Credits</h2>
+    <dl class="xp-roll-credits">
+      <div><dt>Directed by</dt><dd>Tinashe Moyo</dd></div>
+      <div><dt>Barbers</dt><dd>Tinashe · Kuda · Rudo · Farai</dd></div>
+      <div><dt>Shot on location</dt><dd>27 Kingsmead Road, Borrowdale, Harare</dd></div>
+      <div><dt>Score</dt><dd>Synthesised live in your browser</dd></div>
+      <div><dt>In memory of</dt><dd>Gogo Reinat, who cut hair under a tree in Mbare</dd></div>
+    </dl>
+    <a class="btn btn--lime btn--lg" href="book.html">Book your chair <span aria-hidden="true">→</span></a>
   </section>
 </main>
 
-<div class="modal lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Reel preview" hidden>
-  <div class="modal__backdrop" data-lb-close></div>
-  <div class="modal__panel">
-    <button type="button" class="icon-btn modal__close" aria-label="Close preview" data-lb-close>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    </button>
-    <img class="lightbox__img" src="assets/img/reel-3.jpg" alt="" data-lb-img width="540" height="960">
-    <div class="lightbox__body">
-      <a class="lightbox__handle" href="https://www.instagram.com/reinats.studio/" target="_blank" rel="noopener noreferrer" data-lb-handle></a>
-      <p class="lightbox__cap" data-lb-cap></p>
-      <a class="btn btn--lime btn--block" href="book.html" data-lb-book>Book this look →</a>
-    </div>
+<div class="xp-hud">
+  <div class="xp-hud__left" aria-live="polite"><span class="xp-rec" aria-hidden="true">REC</span><span class="xp-hud__scene"><b data-hud-n>00</b><span aria-hidden="true">/09</span> <span data-hud-title>Opening titles</span></span></div>
+  <nav class="xp-rail" data-xp-rail aria-label="Jump to a scene"></nav>
+  <div class="xp-hud__right">
+    <span class="xp-tc" data-hud-tc aria-hidden="true">00:00:00:00</span>
+    <button type="button" class="xp-sound" data-xp-sound aria-pressed="false"><span class="xp-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span data-sound-label>Sound off</span></button>
   </div>
+  <div class="xp-hud__bar" aria-hidden="true"><span data-hud-bar></span></div>
 </div>
 
 <!--@footer-->
 <!--@modal-->
+<script src="assets/js/xp.js" defer></script>
 </body>
 </html>

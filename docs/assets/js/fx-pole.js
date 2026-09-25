@@ -10,9 +10,9 @@
       varying vec2 uv;
       uniform vec2 res; uniform float t; uniform float spin;
       const vec3 INK = vec3(0.047, 0.043, 0.039);
-      const vec3 BONE = vec3(0.953, 0.933, 0.898);
-      const vec3 CORAL = vec3(1.0, 0.416, 0.239);
-      const vec3 LIME = vec3(0.824, 1.0, 0.302);
+      const vec3 BONE = vec3(0.933, 0.941, 0.949);
+      const vec3 CORAL = vec3(0.898, 0.196, 0.176);
+      const vec3 LIME = vec3(0.302, 0.486, 1.0);
       float sat(float x){ return clamp(x, 0.0, 1.0); }
       vec3 chrome(float x, float y){
         // brushed-metal banding that reads as a polished cap
@@ -35,12 +35,12 @@
           if (q.y < tubeTop && q.y > tubeBot) {
             float theta = asin(ax);                            // angle around the tube
             float s = fract((theta / 6.28318) * 1.0 + q.y * 1.35 + spin + t * 0.05);
-            vec3 stripe = s < 0.25 ? CORAL : (s < 0.5 ? BONE : (s < 0.75 ? INK : BONE));
+            vec3 stripe = s < 0.25 ? CORAL : (s < 0.5 ? BONE : (s < 0.75 ? LIME : BONE));
             float edge = smoothstep(0.0, 0.012, abs(fract(s * 4.0) - 0.0)) ; // soften banding a touch
             vec3 base = stripe * diff * mix(0.92, 1.0, edge);
             // glass sleeve: fresnel rim + a long vertical highlight
             float fres = pow(1.0 - nz, 2.5);
-            base += vec3(0.9) * spec * 0.8 + LIME * fres * 0.35;
+            base += vec3(0.9) * spec * 0.8 + vec3(0.6, 0.72, 1.0) * fres * 0.3;
             base += vec3(1.0) * smoothstep(0.06, 0.0, abs(ax + 0.45)) * 0.18;
             col = vec4(base, 1.0);
           }
@@ -59,7 +59,7 @@
         if (dome.y > 0.0 && length(dome) < 1.0) { float z = sqrt(1.0 - dot(dome, dome)); col = vec4(chrome(dome.x, q.y) * (0.45 + 0.55 * z) + pow(z, 18.0) * 0.5, 1.0); }
         vec2 fin = vec2(q.x / (R * 0.55), (q.y - (tubeBot - 0.065)) / 0.07);
         if (fin.y < 0.0 && length(fin) < 1.0) { float z = sqrt(1.0 - dot(fin, fin)); col = vec4(chrome(fin.x, q.y) * (0.45 + 0.55 * z), 1.0); }
-        // soft lime glow behind the pole
+        // soft blue glow behind the pole
         if (col.a == 0.0) { float g = exp(-pow(q.x / (R * 2.4), 2.0)) * smoothstep(0.5, 0.0, abs(q.y)) * 0.22; col = vec4(LIME * g, g); }
         gl_FragColor = col;
       }`;

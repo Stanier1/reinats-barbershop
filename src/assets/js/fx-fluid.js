@@ -1,5 +1,5 @@
 /* WebGL ink-in-water fluid for the hero: stable-fluids (advection, vorticity, pressure projection).
-   Pointer movement injects lime and coral dye; gentle ambient splats keep it alive on touch devices. */
+   Pointer movement injects blue, red and white dye; gentle ambient splats keep it alive on touch devices. */
 (function (root) {
   function createFluid(canvas, opts = {}) {
     const cfg = Object.assign({ simRes: 128, dyeRes: 512, dissipation: 0.975, velDissipation: 0.985, pressureIters: 18, curl: 22, splatRadius: 0.22, force: 5200 }, opts);
@@ -153,8 +153,8 @@
       gl.useProgram(P.display.p); gl.uniform1i(P.display.u.uTexture, dye.read.attach(0)); blit(null);
     }
 
-    // Brand palette: acid lime and coral, kept dim so text above stays readable.
-    const PALETTE = [[0.82, 1.0, 0.3], [1.0, 0.42, 0.24], [0.82, 1.0, 0.3]];
+    // Barber-pole palette: electric blue, barber red and a little white, kept dim so text above stays readable.
+    const PALETTE = [[0.3, 0.49, 1.0], [0.9, 0.2, 0.18], [0.3, 0.49, 1.0], [0.85, 0.88, 0.95]];
     let ci = 0;
     const nextColor = (k = 0.16) => { ci = (ci + 1) % PALETTE.length; const c = PALETTE[ci]; return [c[0] * k, c[1] * k, c[2] * k]; };
 

@@ -32,7 +32,7 @@
         <img src="assets/img/hero.jpg" alt="Reinat’s barber shaping a textured sponge-twist top with clippers" width="1200" height="1500" fetchpriority="high">
         <span class="hero__float hero__rating sticker sticker--coral sticker--tilt">Walk-ins welcome</span>
         <div class="hero__float spin-badge" aria-hidden="true">
-          <svg viewBox="0 0 120 120"><defs><path id="circ" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><circle cx="60" cy="60" r="60" fill="#d2ff4d"/><text font-family="Inter, sans-serif" font-size="11.5" font-weight="700" fill="#0c0b0a"><textPath href="#circ" textLength="286" lengthAdjust="spacing">BOOK ONLINE • ADD TO CALENDAR •</textPath></text></svg>
+          <svg viewBox="0 0 120 120"><defs><path id="circ" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><circle cx="60" cy="60" r="60" fill="#4d7cff"/><text font-family="Inter, sans-serif" font-size="11.5" font-weight="700" fill="#05060a"><textPath href="#circ" textLength="286" lengthAdjust="spacing">BOOK ONLINE • ADD TO CALENDAR •</textPath></text></svg>
           <span>↗</span>
         </div>
         <a class="hero__float next-free" href="book.html" data-next-free hidden>
@@ -40,6 +40,29 @@
           <span><small>Next free chair</small><strong data-next-free-text>Today</strong></span>
           <span class="next-free__go">Grab it →</span>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="film" data-film aria-labelledby="film-title">
+    <div class="film__stage">
+      <div class="film__frame">
+        <img class="film__poster" src="assets/film/poster.jpg" alt="A barber shapes a client’s beard in the chair while the next client waits with a basketball" width="1440" height="810" loading="lazy">
+        <canvas class="film__canvas" data-film-canvas aria-hidden="true"></canvas>
+        <div class="film__shade" aria-hidden="true"></div>
+      </div>
+      <div class="film__copy container">
+        <span class="eyebrow film__eyebrow">Inside the studio · Kingsmead Road</span>
+        <h2 id="film-title" class="visually-hidden">Inside the studio</h2>
+        <ol class="film__lines">
+          <li class="film__line" data-film-line><span>Every cut starts</span> <em>with a conversation</em></li>
+          <li class="film__line" data-film-line><span>Then the chair</span> <em>goes quiet</em></li>
+          <li class="film__line" data-film-line><span>You leave sharper</span> <em>than you came</em></li>
+        </ol>
+        <div class="film__foot">
+          <a class="btn btn--lime btn--lg" href="book.html">Book your chair <span aria-hidden="true">→</span></a>
+          <span class="film__time" aria-hidden="true"><span data-film-tc>00:00</span> / 00:10</span>
+        </div>
       </div>
     </div>
   </section>
@@ -106,14 +129,14 @@
     </div>
   </section>
 
-  <section class="section section--ink-2" aria-labelledby="popular-title">
+  <section class="section section--ink-2 hscroll" data-hscroll aria-labelledby="popular-title">
     <div class="container">
       <div class="section-head reveal">
         <div>
           <span class="eyebrow">Most booked</span>
           <h2 id="popular-title" class="display-m">The regulars</h2>
         </div>
-        <a class="btn btn--ghost" href="services.html">Full menu &amp; prices →</a>
+        <div class="hscroll__head"><span class="hscroll__hint" aria-hidden="true">Scroll ⟶</span><a class="btn btn--ghost" href="services.html">Full menu &amp; prices →</a></div>
       </div>
       <div class="card-grid reveal">
         <article class="svc-card">

@@ -21,6 +21,7 @@
   function start() {
     const gsap = window.gsap;
     if (fine) { cursor(gsap); magnetic(gsap); }
+    wipe(gsap);
     if (calm) return;
     gsap.registerPlugin(window.ScrollTrigger);
     const ST = window.ScrollTrigger;
@@ -31,7 +32,10 @@
     parallax(gsap, ST);
     marquee(ST);
     fluidHero();
+    // Pinned sections must be created in page order so each one measures the spacing added above it.
+    filmScrub(gsap, ST);
     poleStory(gsap, ST);
+    hscroll(gsap, ST);
     window.addEventListener('load', () => ST.refresh());
   }
 
@@ -141,6 +145,100 @@
         if (bar) bar.style.transform = `scaleX(${p})`;
         setActive(Math.min(chapters.length - 1, Math.floor(p * chapters.length * 0.999)));
       }
+    });
+  }
+
+  /* ---------- Scroll-scrubbed film: a frame sequence drawn to canvas while the section is pinned ---------- */
+  function filmScrub(gsap, ST) {
+    const sec = document.querySelector('[data-film]'); if (!sec) return;
+    const canvas = sec.querySelector('[data-film-canvas]'); const ctx = canvas && canvas.getContext('2d'); if (!ctx) return;
+    const frame = sec.querySelector('.film__frame'), stage = sec.querySelector('.film__stage');
+    const lines = [...sec.querySelectorAll('[data-film-line]')], tc = sec.querySelector('[data-film-tc]');
+    const N = 99, SECONDS = 10, dir = small ? 'm' : 'd', focusX = small ? 0.3 : 0.5;
+    const frames = new Array(N);
+    const url = (i) => `assets/film/${dir}/${String(i + 1).padStart(3, '0')}.webp`;
+    // Coarse-to-fine load order so the whole clip is scrubbable early and sharpens as frames arrive.
+    const order = [], seen = new Set();
+    [16, 8, 4, 2, 1].forEach((step) => { for (let i = 0; i < N; i += step) if (!seen.has(i)) { seen.add(i); order.push(i); } });
+    let q = 0, cur = 0, started = false;
+    const pull = () => {
+      if (q >= order.length) return; const i = order[q++]; const im = new Image(); im.decoding = 'async';
+      im.onload = () => { frames[i] = im; if (Math.abs(i - cur) < 3 || i === 0) draw(); pull(); };
+      im.onerror = pull; im.src = url(i);
+    };
+    const begin = () => { if (started) return; started = true; for (let k = 0; k < 6; k++) pull(); };
+    // Frames stay off the critical path: nothing loads until the visitor scrolls (the poster covers until then).
+    window.addEventListener('scroll', begin, { once: true, passive: true });
+    new IntersectionObserver((es, io) => { if (es[0].isIntersecting) { begin(); io.disconnect(); } }).observe(sec);
+
+    const nearest = (i) => { for (let d = 0; d < N; d++) { if (frames[i - d]) return frames[i - d]; if (frames[i + d]) return frames[i + d]; } return null; };
+    const fit = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const w = Math.round(canvas.clientWidth * dpr), h = Math.round(canvas.clientHeight * dpr);
+      if (w && h && (canvas.width !== w || canvas.height !== h)) { canvas.width = w; canvas.height = h; return true; }
+      return false;
+    };
+    function draw() {
+      const im = nearest(cur); if (!im) return;
+      fit(); const cw = canvas.width, ch = canvas.height; if (!cw || !ch) return;
+      const s = Math.max(cw / im.naturalWidth, ch / im.naturalHeight), w = im.naturalWidth * s, h = im.naturalHeight * s;
+      ctx.drawImage(im, (cw - w) * focusX, (ch - h) / 2, w, h);
+      sec.classList.remove('is-waiting');
+    }
+    window.addEventListener('resize', () => { if (fit()) draw(); });
+
+    const bar = document.createElement('div'); bar.className = 'film__bar'; bar.setAttribute('aria-hidden', 'true'); bar.innerHTML = '<span></span>';
+    stage.appendChild(bar);
+    sec.classList.add('is-live', 'is-waiting');
+    let active = -1;
+    const setLine = (i) => { if (i === active) return; active = i; lines.forEach((l, k) => l.classList.toggle('is-active', k === i)); };
+    setLine(0);
+
+    // The frame opens from a rounded card to full bleed as the section arrives.
+    gsap.fromTo(frame, { clipPath: 'inset(9% 7% 9% 7% round 28px)' }, { clipPath: 'inset(0% 0% 0% 0% round 0px)', ease: 'none',
+      scrollTrigger: { trigger: sec, start: 'top 90%', end: 'top top', scrub: true } });
+    ST.create({
+      trigger: sec, start: 'top top', end: () => '+=' + window.innerHeight * (small ? 2 : 2.8), pin: stage, scrub: true, anticipatePin: 1,
+      onUpdate: (self) => {
+        const p = self.progress, i = Math.min(N - 1, Math.round(p * (N - 1)));
+        if (i !== cur) { cur = i; begin(); requestAnimationFrame(draw); }
+        bar.firstChild.style.transform = `scaleX(${p})`;
+        if (tc) tc.textContent = '00:' + String(Math.min(SECONDS, Math.floor(p * SECONDS))).padStart(2, '0');
+        setLine(Math.min(lines.length - 1, Math.floor(p * lines.length * 0.999)));
+      }
+    });
+  }
+
+  /* ---------- "The regulars" slide sideways while pinned (wide screens only) ---------- */
+  function hscroll(gsap, ST) {
+    const sec = document.querySelector('[data-hscroll]'); if (!sec || window.innerWidth < 1000) return;
+    const grid = sec.querySelector('.card-grid'); if (!grid) return;
+    sec.classList.add('is-live');
+    const dist = () => Math.max(0, grid.scrollWidth - grid.parentElement.clientWidth);
+    if (dist() < 40) { sec.classList.remove('is-live'); return; }
+    gsap.to(grid, { x: () => -dist(), ease: 'none',
+      scrollTrigger: { trigger: sec, start: 'top top', end: () => '+=' + dist() * 1.4, pin: true, scrub: 0.6, invalidateOnRefresh: true, anticipatePin: 1 } });
+  }
+
+  /* ---------- Page transition: three barber-pole panels wipe between pages ---------- */
+  function wipe(gsap) {
+    const w = document.createElement('div'); w.className = 'fx-wipe'; w.setAttribute('aria-hidden', 'true'); w.innerHTML = '<i></i><i></i><i></i>';
+    document.body.appendChild(w);
+    const bars = w.children;
+    let arrived = false; try { arrived = sessionStorage.getItem('rb_wipe') === '1'; sessionStorage.removeItem('rb_wipe'); } catch (e) {}
+    if (arrived) gsap.fromTo(bars, { scaleY: 1, transformOrigin: '50% 0%' }, { scaleY: 0, duration: 0.6, ease: 'expo.inOut', stagger: 0.06, delay: 0.05 });
+    window.addEventListener('pageshow', (e) => { if (e.persisted) gsap.set(bars, { scaleY: 0 }); });
+    document.addEventListener('click', (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest('a[href]'); if (!a || a.target === '_blank' || a.hasAttribute('download')) return;
+      const u = new URL(a.href, location.href);
+      if (u.origin !== location.origin || !/\.html$|\/$/.test(u.pathname)) return;
+      if (u.pathname === location.pathname && u.search === location.search) return; // same page, maybe a hash jump
+      e.preventDefault();
+      try { sessionStorage.setItem('rb_wipe', '1'); } catch (err) {}
+      gsap.fromTo(bars, { scaleY: 0, transformOrigin: '50% 100%' }, { scaleY: 1, duration: 0.45, ease: 'expo.in', stagger: 0.05,
+        onComplete: () => { location.href = u.href; } });
+      setTimeout(() => { location.href = u.href; }, 900); // never strand the visitor if the tween stalls
     });
   }
 

@@ -1,0 +1,124 @@
+/* ==========================================================================
+   Noir edition (immersive branch)
+   Near-black stage, cool white type, monochrome photography. The accents come
+   straight off a barber pole: electric blue for action, barber red used sparingly.
+   Loaded after styles.css and only overrides tokens and a handful of rules.
+   ========================================================================== */
+:root {
+  --ink: #07080a;
+  --ink-2: #0d0f12;
+  --ink-3: #15181c;
+  --ink-4: #22262c;
+  --bone: #eef0f2;
+  --bone-2: #dfe3e8;
+  --muted: #979ea8;
+  --muted-ink: #50565f;
+  --lime: #4d7cff;
+  --lime-2: #3a66ea;
+  --lime-ink: #05060a;
+  --coral: #e5322d;
+  --line: rgba(238, 240, 242, 0.1);
+  --line-2: rgba(238, 240, 242, 0.2);
+  --line-ink: rgba(7, 8, 10, 0.14);
+  --glow: rgba(77, 124, 255, 0.45);
+  --r: 18px;
+  --r-lg: 26px;
+}
+
+/* Type: bigger, tighter, quieter */
+.display-xl { font-size: clamp(56px, 10.5vw, 168px); line-height: 0.86; letter-spacing: -0.055em; }
+.display-l { letter-spacing: -0.05em; }
+.display-m { letter-spacing: -0.045em; }
+.eyebrow { color: var(--muted); letter-spacing: 0.22em; }
+.eyebrow::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 12px var(--glow); }
+::selection { background: var(--lime); color: #fff; }
+
+/* Accent colour fixes where the old lime was hard-coded */
+.btn--lime { box-shadow: 0 12px 34px -14px var(--glow); }
+.btn--lime:hover { --bg: #7a9dff; --bd: #7a9dff; }
+.site-header__actions .btn[aria-current='page'] { box-shadow: 0 0 0 3px rgba(77, 124, 255, 0.3); }
+.open-pill.is-open::before { box-shadow: 0 0 0 4px rgba(77, 124, 255, 0.2); }
+@keyframes pulse { 50% { box-shadow: 0 0 0 7px rgba(77, 124, 255, 0); } }
+.step:nth-child(2) p, .cal-btn--primary small { color: rgba(5, 6, 10, 0.72); }
+.opt[aria-pressed='true'] { background: rgba(77, 124, 255, 0.1); }
+.input:focus { box-shadow: 0 0 0 4px rgba(77, 124, 255, 0.18); }
+.barber:target { box-shadow: 0 0 0 3px rgba(77, 124, 255, 0.25); }
+.barber-feature { box-shadow: 0 0 0 3px rgba(77, 124, 255, 0.16), 0 40px 90px -40px var(--glow); }
+.code-chip { background: rgba(77, 124, 255, 0.07); }
+.fx-cursor.is-hover { background: rgba(77, 124, 255, 0.14); }
+.pole-fallback span { border-color: #c9ced6; box-shadow: 0 0 80px rgba(77, 124, 255, 0.25), inset -14px 0 20px rgba(0, 0, 0, 0.35);
+  background: repeating-linear-gradient(-35deg, var(--coral) 0 22px, var(--bone) 22px 44px, var(--lime) 44px 66px, var(--bone) 66px 88px); background-size: 100% 250px; }
+.story__ring { background: conic-gradient(from 210deg, var(--lime), var(--bone), var(--coral), var(--bone), var(--lime)); }
+.promo-bar { background: #2c59e8; color: #fff; }
+.promo-bar strong, .promo-bar b { color: #fff; }
+.mobile-menu { background: var(--lime); color: var(--lime-ink); }
+.marquee { background: var(--bone); color: var(--ink); transform: rotate(-1.6deg); }
+.marquee__item::after { color: var(--coral); }
+.cta-band { background: var(--lime); color: var(--lime-ink); box-shadow: 0 50px 120px -50px var(--glow); }
+.sticker--coral { color: #fff; }
+.reel__likes svg { color: var(--coral); }
+
+/* Monochrome photography that warms to colour on hover */
+.hero__media img, .svc-card__media img, .story__ring img, .reel img, .gallery img, .barber-mini img, .barber-feature img, .barber-opt img, .barber img, .story-grid__media img {
+  filter: grayscale(1) contrast(1.06) brightness(0.96); transition: filter 0.7s var(--ease), transform 0.9s var(--ease);
+}
+.svc-card:hover .svc-card__media img, .story:hover .story__ring img, .reel:hover img, .gallery a:hover img, .gallery figure:hover img,
+.barber-mini:hover img, .barber-feature img, .barber-opt[aria-pressed='true'] img, .barber-opt:hover img, .hero__media:hover img { filter: grayscale(0) contrast(1.02); }
+
+/* Hero: full-bleed stage with the ink simulation behind the type */
+.hero { min-height: 100vh; min-height: 100svh; display: grid; align-items: center; background: radial-gradient(120% 80% at 80% 0%, #10141c 0%, var(--ink) 60%); }
+.hero__media { border-radius: 26px; }
+.hero__media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(7, 8, 10, 0.55)); pointer-events: none; }
+.hero .display-xl em { color: var(--lime); text-shadow: 0 0 60px rgba(77, 124, 255, 0.35); }
+
+/* ------------------------------------------------------------------ Film */
+.film { position: relative; background: var(--ink); }
+.film__stage { position: relative; }
+.film__frame { position: relative; margin: 0 var(--gutter); border-radius: var(--r-lg); overflow: hidden; aspect-ratio: 16 / 9; max-height: 86vh; background: #000; }
+.film__poster, .film__canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.film__canvas { display: none; }
+.film__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(7, 8, 10, 0.78) 0%, rgba(7, 8, 10, 0.25) 55%, rgba(7, 8, 10, 0.1) 100%), linear-gradient(0deg, rgba(7, 8, 10, 0.7), transparent 45%); }
+.film__copy { position: relative; padding-block: 28px 8px; display: flex; flex-direction: column; gap: 18px; }
+.film__lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.film__line { font: 800 clamp(34px, 5.6vw, 88px)/0.9 var(--f-display); letter-spacing: -0.05em; }
+.film__line em { display: block; font: italic 400 1.02em/0.95 var(--f-serif); letter-spacing: -0.02em; color: var(--lime); }
+.film__foot { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.film__time { font: 600 12px/1 var(--f-body); letter-spacing: 0.2em; color: var(--muted); font-variant-numeric: tabular-nums; }
+.film__time span { color: var(--bone); }
+
+/* Live mode: the frame pins and grows to full screen while the clip scrubs */
+.film.is-live .film__stage { height: 100vh; height: 100svh; overflow: hidden; }
+.film.is-live .film__frame { position: absolute; inset: 0; margin: 0; aspect-ratio: auto; max-height: none; border-radius: 0; will-change: clip-path; }
+.film.is-live .film__canvas { display: block; }
+.film.is-live .film__poster { opacity: 0; }
+.film.is-live.is-waiting .film__poster { opacity: 1; }
+.film.is-live .film__copy { position: absolute; inset: auto 0 0; padding-block: 0 clamp(28px, 6vh, 64px); z-index: 2; }
+.film.is-live .film__lines { display: grid; min-height: 2.1em; font-size: clamp(34px, 5.6vw, 88px); }
+.film.is-live .film__line { grid-area: 1 / 1; font-size: 1em; opacity: 0; transform: translateY(0.4em); filter: blur(8px); transition: opacity 0.55s var(--ease), transform 0.7s var(--ease), filter 0.6s var(--ease); }
+.film.is-live .film__line.is-active { opacity: 1; transform: none; filter: none; }
+.film__bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(238, 240, 242, 0.12); z-index: 3; }
+.film__bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--coral), var(--bone), var(--lime)); transform-origin: left; transform: scaleX(0); }
+
+@media (max-width: 760px) {
+  .film__frame { aspect-ratio: 4 / 5; }
+  .film__poster { object-position: 32% 50%; }
+  .film__shade { background: linear-gradient(0deg, rgba(7, 8, 10, 0.88) 10%, rgba(7, 8, 10, 0.2) 60%, rgba(7, 8, 10, 0.35)); }
+  .hero { min-height: auto; }
+}
+
+/* ------------------------------------------------------ Horizontal services */
+.hscroll.is-live { overflow: hidden; }
+.hscroll.is-live .card-grid { display: flex; flex-wrap: nowrap; gap: 24px; width: max-content; will-change: transform; }
+.hscroll.is-live .svc-card { width: clamp(300px, 28vw, 420px); flex: none; }
+.hscroll__hint { display: none; font: 600 12px/1 var(--f-body); letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.hscroll.is-live .hscroll__hint { display: inline-flex; gap: 10px; align-items: center; }
+
+/* ------------------------------------------------------ Page transition */
+.fx-wipe { position: fixed; inset: 0; z-index: 400; pointer-events: none; display: grid; grid-template-columns: repeat(3, 1fr); }
+.fx-wipe i { background: var(--ink-2); transform: scaleY(0); transform-origin: bottom; }
+.fx-wipe i:nth-child(2) { background: var(--lime); }
+.fx-wipe i:nth-child(3) { background: var(--coral); }
+.fx-wipe.is-in i { transform: scaleY(1); transition: transform 0.42s cubic-bezier(0.7, 0, 0.3, 1); }
+.fx-wipe.is-in i:nth-child(2) { transition-delay: 0.05s; }
+.fx-wipe.is-in i:nth-child(3) { transition-delay: 0.1s; }
+.hscroll__head { display: flex; align-items: center; gap: 22px; }

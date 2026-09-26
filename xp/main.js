@@ -7,6 +7,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { FXAAPass } from 'three/addons/postprocessing/FXAAPass.js';
 import { buildWorld } from './world.js';
 import { createSound } from './sound.js';
 
@@ -67,9 +68,8 @@ function boot() {
   const gl = renderer.getContext(), dbg = gl.getExtension('WEBGL_debug_renderer_info');
   const gpu = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
   const lowGPU = small || /Intel|Mali|Adreno|PowerVR|SwiftShader|llvmpipe|Basic Render|Radeon\(TM\) (R[2-7]|Vega [3-8]) /i.test(gpu);
-  const MAXPR = Math.min(devicePixelRatio || 1, small ? 1.5 : 1.75);
-  let scale = q === 'high' ? 1 : lowGPU ? Math.min(1, 1 / MAXPR) : Math.min(1, 1.25 / MAXPR); // start at about 1x CSS pixels on weaker GPUs
-  let DPR = MAXPR * scale;
+  // Always render at the screen's native pixel density (capped at 2x) so edges and neon stay crisp.
+  const DPR = Math.min(devicePixelRatio || 1, 2);
   renderer.setPixelRatio(DPR); renderer.setSize(W, H, false);
 
   let world;
@@ -77,12 +77,16 @@ function boot() {
   const { scene } = world;
   const camera = new THREE.PerspectiveCamera(42, W / H, 0.08, 200);
 
-  const rt = new THREE.WebGLRenderTarget(W * DPR, H * DPR, { type: THREE.HalfFloatType, samples: q === 'high' ? 4 : lowGPU ? 0 : 2 });
+  const rt = new THREE.WebGLRenderTarget(W * DPR, H * DPR, { type: THREE.HalfFloatType, samples: q === 'high' || !lowGPU ? 4 : 0 });
   const composer = new EffectComposer(renderer, rt);
   composer.setPixelRatio(DPR); composer.setSize(W, H);
   composer.addPass(new RenderPass(scene, camera));
   const bloom = new UnrealBloomPass(new THREE.Vector2(W, H), 0.6, 0.5, 0.95); composer.addPass(bloom);
+  // Glow is a blur, so on weaker GPUs it runs at half its usual internal size; it stays on, the neon depends on it.
+  if (lowGPU) { const set = bloom.setSize.bind(bloom); bloom.setSize = (w, h) => set(Math.round(w / 2), Math.round(h / 2)); }
   const film = new ShaderPass(FilmShader); composer.addPass(film);
+  // FXAA smooths edges whenever multisampling is off (weaker GPUs), at almost no cost.
+  const fxaa = new FXAAPass(); fxaa.enabled = rt.samples === 0; composer.addPass(fxaa);
 
   /* ---------- Camera stops: CatmullRom through the positions, slerp between orientations ---------- */
   const posCurve = new THREE.CatmullRomCurve3(SCENES.map((s) => new THREE.Vector3(...s.pos)), false, 'centripetal', 0.5);
@@ -177,8 +181,7 @@ function boot() {
   /* ---------- Loop ---------- */
   const leader = document.querySelector('.xp-leader');
   const started = performance.now();
-  let ema = 0, good = 0;
-  const setScale = (s) => { scale = s; DPR = MAXPR * s; renderer.setPixelRatio(DPR); composer.setPixelRatio(DPR); composer.setSize(W, H); film.uniforms.uRes.value.set(W * DPR, H * DPR); };
+  let ema = 0;
   let sp = -1, last = performance.now(), introT = 0, signFlick = 0, buzzKick = 0, frames = 0, lastScene = -1, lastSnip = -1, shinged = false, prevC = 0;
   const pos = new THREE.Vector3(), quat = new THREE.Quaternion(), fwd = new THREE.Vector3(), right = new THREE.Vector3(), up = new THREE.Vector3(), offs = { x: 0, y: 0 };
   let st = null;
@@ -253,26 +256,23 @@ function boot() {
     buzzKick = Math.max(0, buzzKick - dt);
     sound.buzz(Math.max(state.near('fade') * 0.8, buzzKick));
 
-    if (mouse.moved || drag) { pick(); mouse.moved = false; }
+    if (mouse.moved || drag || frames % 6 === 0) { pick(); mouse.moved = false; }
     state.buzz = sound.on || buzzKick > 0; state.signFlick = signFlick; signFlick = Math.max(0, signFlick - dt);
     state.hoverCrew = hover && hover.kind === 'crew' ? hover.item : null;
     world.update(t, dt, state);
 
-    film.uniforms.uTime.value = t; film.uniforms.uAb.value = 0.005 + Math.min(0.04, vel * 0.02);
+    film.uniforms.uTime.value = t; film.uniforms.uAb.value = 0.0012 + Math.min(0.008, vel * 0.006);
     bloom.strength = 0.6 + Math.min(0.4, vel * 0.2);
     if (past < 0.995) composer.render(dt);
 
-    // Adaptive quality: keep frames under ~22ms by trading MSAA, then resolution, then bloom; climb back when there's headroom.
+    // Adaptive quality: if frames run long, swap MSAA for FXAA, then drop bloom. Resolution is never lowered.
     frames++;
     if (q !== 'high' && rawDt < 0.5) {
       ema = ema ? ema * 0.92 + rawDt * 1000 * 0.08 : rawDt * 1000;
       if (frames % 30 === 0 && frames > 20) {
         if (ema > 22) {
-          good = 0;
-          if (composer.renderTarget1.samples > 0) { [composer.renderTarget1, composer.renderTarget2].forEach((r) => { r.samples = 0; r.dispose(); }); }
-          else if (scale > 0.55 / MAXPR + 0.01) setScale(Math.max(0.55 / MAXPR, scale * 0.82));
-          else if (bloom.enabled) bloom.enabled = false;
-        } else if (ema < 12.5 && ++good >= 3 && scale < 1) { good = 0; setScale(Math.min(1, scale * 1.12)); }
+          if (composer.renderTarget1.samples > 0) { [composer.renderTarget1, composer.renderTarget2].forEach((r) => { r.samples = 0; r.dispose(); }); fxaa.enabled = true; }
+        }
       }
     }
     if (frames === 2 && leader) { const wait = Math.max(0, 1500 - (now - started)); setTimeout(() => { leader.classList.add('is-done'); setTimeout(() => leader.remove(), 900); }, wait); }
@@ -286,7 +286,7 @@ function boot() {
   document.addEventListener('visibilitychange', () => { if (document.hidden) { sound.pause(); world.pauseVideo(); } else sound.resume(); });
   // Small public handle: scene jumps for the HUD and for automated checks.
   window.RBFilm = { go, scenes: SCENES.map((s) => s.id), state: () => ({ c: state.c, scene: SCENES[Math.round(state.c)].id }),
-    quality: () => ({ gpu, lowGPU, pixelRatio: +DPR.toFixed(2), msaa: composer.renderTarget1.samples, bloom: bloom.enabled, frameMs: +ema.toFixed(1) }),
+    quality: () => ({ gpu, lowGPU, pixelRatio: +DPR.toFixed(2), msaa: composer.renderTarget1.samples, fxaa: fxaa.enabled, bloom: bloom.enabled, frameMs: +ema.toFixed(1) }),
     jump: (k, f = 0.35) => { const y = yFor(k) + (f - 0.35) * SCENES[k].hold * unit; if (window.RBLenis) window.RBLenis.scrollTo(y, { immediate: true }); else scrollTo(0, y); sp = -1; } };
 }
 

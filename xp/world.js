@@ -128,7 +128,7 @@ function neonAccents(scene) {
     ['Fresh Cuts', '#ff3dbb', -5.6, 3.9, -5.5, 0.55, 'italic 400 150px "Instrument Serif", Georgia, serif'],
     ['OPEN', '#ff2b27', 5.4, 2.6, -12.5, -0.6, '800 150px "Bricolage Grotesque", Inter, sans-serif'],
     ['No Waiting', '#3dff9a', 5.4, 3.2, -27, -0.55, 'italic 400 140px "Instrument Serif", Georgia, serif'],
-    ['SHARP', '#ffb15a', -5.2, 3.0, -47, 0.55, '800 140px "Bricolage Grotesque", Inter, sans-serif'],
+    ['SHARP', '#ffb15a', -5.4, 4.7, -48, 0.55, '800 140px "Bricolage Grotesque", Inter, sans-serif'],
     ['Since 2018', '#6fa0ff', 5.2, 3.4, -60, -0.5, 'italic 400 140px "Instrument Serif", Georgia, serif'],
   ];
   const draw = (cv, text, col, font) => {

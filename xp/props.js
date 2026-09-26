@@ -13,15 +13,15 @@ export function makeMaterials() {
     gunmetal: new THREE.MeshStandardMaterial({ color: 0x3b3f47, metalness: 1, roughness: 0.34, envMapIntensity: 1.1 }),
     steel: new THREE.MeshStandardMaterial({ color: 0xeef1f6, metalness: 1, roughness: 0.2, envMapIntensity: 2.4 }),
     gold: new THREE.MeshStandardMaterial({ color: 0xd9a94f, metalness: 1, roughness: 0.22, envMapIntensity: 1.3 }),
-    gloss: new THREE.MeshPhysicalMaterial({ color: 0x0b0c0f, metalness: 0.1, roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.08, envMapIntensity: 1.2 }),
+    gloss: new THREE.MeshStandardMaterial({ color: 0x0b0c0f, metalness: 0.1, roughness: 0.3, envMapIntensity: 1.2 }),
     matte: new THREE.MeshStandardMaterial({ color: 0x131418, roughness: 0.8, envMapIntensity: 0.4 }),
     rubber: new THREE.MeshStandardMaterial({ color: 0x0a0a0c, roughness: 0.55, envMapIntensity: 0.6 }),
-    leather: new THREE.MeshPhysicalMaterial({ color: 0x5e0e15, roughness: 0.42, clearcoat: 0.7, clearcoatRoughness: 0.3, envMapIntensity: 0.9 }),
-    ivory: new THREE.MeshPhysicalMaterial({ color: 0xe9e1cc, roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.08, envMapIntensity: 1 }),
-    wood: new THREE.MeshPhysicalMaterial({ color: 0x8a5429, roughness: 0.42, clearcoat: 0.6, clearcoatRoughness: 0.2, envMapIntensity: 0.9 }),
+    leather: new THREE.MeshStandardMaterial({ color: 0x5e0e15, roughness: 0.42, envMapIntensity: 0.9 }),
+    ivory: new THREE.MeshStandardMaterial({ color: 0xe9e1cc, roughness: 0.28, envMapIntensity: 1 }),
+    wood: new THREE.MeshStandardMaterial({ color: 0x8a5429, roughness: 0.42, envMapIntensity: 0.9 }),
     towel: new THREE.MeshStandardMaterial({ color: 0xecebe7, roughness: 1, envMapIntensity: 0.5 }),
     plinth: new THREE.MeshStandardMaterial({ color: 0x0e0f12, roughness: 0.5, metalness: 0.3, envMapIntensity: 0.7 }),
-    glass: new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.04, metalness: 0, transparent: true, opacity: 0.16, clearcoat: 1, envMapIntensity: 1.6, depthWrite: false }),
+    glass: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.04, metalness: 0, transparent: true, opacity: 0.16, envMapIntensity: 1.6, depthWrite: false }),
   };
 }
 
@@ -54,7 +54,7 @@ function stripeTexture() {
   return tex;
 }
 
-export function makePole(M, lit = true) {
+export function makePole(M) {
   const g = new THREE.Group(), add = adder(g);
   const tex = stripeTexture();
   const stripes = add(new THREE.CylinderGeometry(0.16, 0.16, 1.3, 64, 1, true), new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: 0xffffff, emissiveIntensity: 0.32, roughness: 0.35 }), 0, 1.95, 0);
@@ -66,7 +66,6 @@ export function makePole(M, lit = true) {
   add(new THREE.CylinderGeometry(0.05, 0.16, 0.18, 48), M.chrome, 0, 1.11, 0);
   add(new THREE.CylinderGeometry(0.028, 0.028, 1.02, 16), M.chromeSoft, 0, 0.51, 0);
   add(new THREE.CylinderGeometry(0.26, 0.3, 0.05, 48), M.chrome, 0, 0.025, 0);
-  if (lit) { const light = new THREE.PointLight(0xffffff, 1.2, 5, 2); light.position.set(0, 1.95, 0.35); g.add(light); }
   g.userData.update = (t) => { stripes.rotation.y = -t * 1.1; };
   return g;
 }
@@ -170,7 +169,7 @@ export function makeBeardKit(M) {
   // Oil bottle: amber glass, glowing oil, black dropper cap and a printed label.
   const prof = [[0, 0], [0.19, 0], [0.205, 0.02], [0.205, 0.5], [0.19, 0.56], [0.12, 0.64], [0.07, 0.68], [0.07, 0.76], [0, 0.76]].map(([a, b]) => new V2(a, b));
   const bottle = new THREE.Group(); g.add(bottle);
-  bottle.add(new THREE.Mesh(new THREE.LatheGeometry(prof, 64), new THREE.MeshPhysicalMaterial({ color: 0x9c4f12, roughness: 0.06, clearcoat: 1, transparent: true, opacity: 0.72, envMapIntensity: 1.6 })));
+  bottle.add(new THREE.Mesh(new THREE.LatheGeometry(prof, 64), new THREE.MeshStandardMaterial({ color: 0x9c4f12, roughness: 0.06, transparent: true, opacity: 0.72, envMapIntensity: 1.6 })));
   const oil = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.44, 48), new THREE.MeshStandardMaterial({ color: 0x3a1a04, emissive: 0xff8a1a, emissiveIntensity: 0.22, roughness: 0.2 }));
   oil.position.y = 0.25; bottle.add(oil);
   const label = new THREE.Mesh(new THREE.CylinderGeometry(0.208, 0.208, 0.22, 64, 1, true, -1.2, 2.4), new THREE.MeshStandardMaterial({ map: labelTexture('Beard Oil', 'REINAT’S · HARARE'), roughness: 0.6 }));
@@ -222,13 +221,13 @@ export function makeMirror(M, videoTex) {
     uniforms: { map: { value: videoTex }, uHas: { value: videoTex ? 1 : 0 }, uTime: { value: 0 } },
     vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
     fragmentShader: `uniform sampler2D map; uniform float uHas; uniform float uTime; varying vec2 vUv;
-      void main(){ vec3 c = uHas > 0.5 ? texture2D(map, vUv).rgb : vec3(0.05); float l = dot(c, vec3(0.299,0.587,0.114));
-        vec3 tint = vec3(l) * vec3(0.9, 0.95, 1.08) * 0.9;
+      void main(){ vec3 c = uHas > 0.5 ? texture2D(map, vUv).rgb : vec3(0.05);
+        vec3 tint = c * vec3(1.06, 1.0, 0.95);
         float sheen = smoothstep(0.35, 0.0, abs(vUv.x - vUv.y * 0.6 - 0.2 + sin(uTime*0.2)*0.05)) * 0.12;
-        float v = smoothstep(0.9, 0.3, length(vUv - 0.5)); gl_FragColor = vec4(tint * (0.55 + 0.45 * v) + sheen, 1.0); }`
+        float v = smoothstep(0.9, 0.3, length(vUv - 0.5)); gl_FragColor = vec4(tint * (0.42 + 0.34 * v) + sheen * 0.6, 1.0); }`
   });
   const glass = add(new THREE.PlaneGeometry(2.62, 1.47), glassMat, 0, 0, 0.056);
-  const bulb = glow(0xfff1d6, 5), sock = M.chromeSoft;
+  const bulb = glow(0xfff1d6, 3.2), sock = M.chromeSoft;
   const spots = [];
   for (let i = 0; i < 9; i++) spots.push([-1.2 + i * 0.3, 0.93]);
   for (let i = 0; i < 5; i++) { spots.push([-1.41, 0.62 - i * 0.3]); spots.push([1.41, 0.62 - i * 0.3]); }
@@ -250,7 +249,7 @@ export function makeCounter(M) {
   for (let i = 0; i < 3; i++) j(new RoundedBoxGeometry(0.02, 0.4, 0.07, 2, 0.008), M.gloss, -0.04 + i * 0.04, 0.3, 0, 0, i * 0.5, -0.15 + i * 0.15);
   const prof = [[0, 0], [0.08, 0], [0.085, 0.02], [0.085, 0.24], [0.04, 0.3], [0.03, 0.36], [0, 0.36]].map(([a, b]) => new V2(a, b));
   [[0.9, 0x7a1418], [1.12, 0x155a3a]].forEach(([x, col]) => {
-    add(new THREE.LatheGeometry(prof, 40), new THREE.MeshPhysicalMaterial({ color: col, roughness: 0.05, clearcoat: 1, transparent: true, opacity: 0.85, envMapIntensity: 1.5 }), x, 0.99, 0);
+    add(new THREE.LatheGeometry(prof, 40), new THREE.MeshStandardMaterial({ color: col, roughness: 0.05, transparent: true, opacity: 0.85, envMapIntensity: 1.5 }), x, 0.99, 0);
     add(new THREE.CylinderGeometry(0.034, 0.034, 0.05, 20), M.chrome, x, 1.37, 0);
   });
   return g;

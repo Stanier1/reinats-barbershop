@@ -56,12 +56,9 @@
 .sticker--coral { color: #fff; }
 .reel__likes svg { color: var(--coral); }
 
-/* Monochrome photography that warms to colour on hover */
-.hero__media img, .svc-card__media img, .story__ring img, .reel img, .gallery img, .barber-mini img, .barber-feature img, .barber-opt img, .barber img, .story-grid__media img {
-  filter: grayscale(1) contrast(1.06) brightness(0.96); transition: filter 0.7s var(--ease), transform 0.9s var(--ease);
-}
-.svc-card:hover .svc-card__media img, .story:hover .story__ring img, .reel:hover img, .gallery a:hover img, .gallery figure:hover img,
-.barber-mini:hover img, .barber-feature img, .barber-opt[aria-pressed='true'] img, .barber-opt:hover img, .hero__media:hover img { filter: grayscale(0) contrast(1.02); }
+/* Photography stays in full colour; a gentle lift on hover */
+.svc-card__media img, .reel img, .gallery img, .barber-mini img, .barber-feature img, .barber-opt img, .barber img { transition: filter 0.6s var(--ease), transform 0.9s var(--ease); }
+.svc-card:hover .svc-card__media img, .reel:hover img, .gallery a:hover img, .barber-mini:hover img, .barber-opt:hover img { filter: saturate(1.12) brightness(1.05); }
 
 /* Hero: full-bleed stage with the ink simulation behind the type */
 .hero { min-height: 100vh; min-height: 100svh; display: grid; align-items: center; background: radial-gradient(120% 80% at 80% 0%, #10141c 0%, var(--ink) 60%); }

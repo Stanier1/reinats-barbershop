@@ -5,9 +5,9 @@
    ========================================================================== */
 @property --xp-a { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
 
-.xp-page { background: #040507; }
-.xp-page .site-header { background: linear-gradient(180deg, rgba(4, 5, 7, 0.82), rgba(4, 5, 7, 0)); backdrop-filter: none; -webkit-backdrop-filter: none; }
-.xp-page .site-header.is-scrolled { background: linear-gradient(180deg, rgba(4, 5, 7, 0.9), rgba(4, 5, 7, 0.35)); border-bottom-color: transparent; }
+.xp-page { background: #0b0816; }
+.xp-page .site-header { background: linear-gradient(180deg, rgba(11, 8, 22, 0.82), rgba(11, 8, 22, 0)); backdrop-filter: none; -webkit-backdrop-filter: none; }
+.xp-page .site-header.is-scrolled { background: linear-gradient(180deg, rgba(11, 8, 22, 0.9), rgba(11, 8, 22, 0.35)); border-bottom-color: transparent; }
 /* The canvas is fixed at z-index 0, so anything that must sit above it (promo ribbon, cards, credits, footer) is positioned. */
 .xp { overflow-x: clip; }
 .xp-page .promo-bar { position: relative; z-index: 61; }
@@ -19,9 +19,9 @@
   background: linear-gradient(180deg, #ffffff 30%, #9fb4ff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 12px 60px rgba(58, 104, 255, 0.35)); }
 .xp-sub { margin: 0; max-width: 36ch; color: #c9ced6; font-size: clamp(16px, 1.25vw, 19px); }
 .xp-slate { margin: 0; display: inline-flex; align-items: center; gap: 12px; font: 600 11.5px/1 var(--f-body); letter-spacing: 0.26em; text-transform: uppercase; color: var(--muted); }
-.xp-slate span { padding: 7px 10px; border: 1px solid var(--line-2); border-radius: 6px; color: var(--bone); background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.07) 0 6px, transparent 6px 12px); }
+.xp-slate span { padding: 7px 10px; border: 1px solid color-mix(in srgb, var(--xp-accent, #ffffff) 55%, transparent); border-radius: 6px; color: var(--bone); background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.07) 0 6px, transparent 6px 12px); }
 .xp-h { margin: 0; font: 800 clamp(44px, 6.2vw, 104px)/0.88 var(--f-display); letter-spacing: -0.05em; }
-.xp-h em { display: block; font: italic 400 1em/0.98 var(--f-serif); letter-spacing: -0.02em; color: var(--lime); }
+.xp-h em { display: block; font: italic 400 1em/0.98 var(--f-serif); letter-spacing: -0.02em; color: var(--xp-accent, var(--lime)); text-shadow: 0 0 40px color-mix(in srgb, var(--xp-accent, var(--lime)) 45%, transparent); }
 .xp-h--big { font-size: clamp(56px, 9vw, 150px); }
 .xp-p { margin: 0; max-width: 38ch; color: #c9ced6; font-size: clamp(15px, 1.1vw, 18px); }
 .xp-meta { margin: 0; display: flex; align-items: baseline; gap: 14px; }
@@ -50,16 +50,16 @@ html.xp-live .xp-quotes figure { grid-area: 1 / 1; }
 
 /* ---------------------------------------------------------------- Fallback: a normal scrolling page */
 .xp-scene { position: relative; min-height: 88vh; min-height: 88svh; display: grid; align-items: end; padding: 120px var(--gutter) 64px; overflow: hidden; border-bottom: 1px solid var(--line); isolation: isolate; }
-.xp-scene > .xp-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: grayscale(1) contrast(1.05) brightness(0.5); }
-.xp-scene::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(4, 5, 7, 0.92) 12%, rgba(4, 5, 7, 0.35) 60%, rgba(4, 5, 7, 0.55)); }
+.xp-scene > .xp-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: saturate(1.1) brightness(0.62); }
+.xp-scene::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(11, 8, 22, 0.92) 12%, rgba(11, 8, 22, 0.35) 60%, rgba(11, 8, 22, 0.55)); }
 .xp-card { position: relative; max-width: var(--max); width: 100%; margin: 0 auto; display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
-.xp-crew .xp-media { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; margin-bottom: 8px; filter: grayscale(1); }
+.xp-crew .xp-media { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; margin-bottom: 8px; }
 .xp-hud, .xp-leader, .xp-dim { display: none; }
-.xp-credits { position: relative; z-index: 3; text-align: center; padding: clamp(80px, 14vh, 160px) var(--gutter); display: grid; justify-items: center; gap: 36px; background: linear-gradient(180deg, transparent, #040507 40%); }
+.xp-credits { position: relative; z-index: 3; text-align: center; padding: clamp(80px, 14vh, 160px) var(--gutter); display: grid; justify-items: center; gap: 36px; background: linear-gradient(180deg, transparent, #0b0816 40%); }
 .xp-roll-credits { margin: 0; display: grid; gap: 26px; }
 .xp-roll-credits dt { font: 600 11px/1 var(--f-body); letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
 .xp-roll-credits dd { margin: 0; font: italic 400 clamp(22px, 2.4vw, 34px)/1.15 var(--f-serif); }
-.xp-page .site-footer { position: relative; z-index: 3; background: #040507; }
+.xp-page .site-footer { position: relative; z-index: 3; background: #0b0816; }
 
 /* ---------------------------------------------------------------- Live film */
 html.xp-live .xp-canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; outline: none; touch-action: pan-y; }
@@ -68,9 +68,9 @@ html.xp-live .xp-scene { position: fixed; inset: 0; z-index: 2; min-height: 0; b
 html.xp-live .xp-scene::after { display: none; }
 /* A soft scrim on the text side keeps cards readable over bright shots */
 html.xp-live .xp-scene::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-html.xp-live .xp-scene[data-text='left']::before { background: linear-gradient(90deg, rgba(4, 5, 7, 0.78) 0%, rgba(4, 5, 7, 0.35) 38%, rgba(4, 5, 7, 0) 60%); }
-html.xp-live .xp-scene[data-text='right']::before { background: linear-gradient(270deg, rgba(4, 5, 7, 0.78) 0%, rgba(4, 5, 7, 0.35) 38%, rgba(4, 5, 7, 0) 60%); }
-html.xp-live .xp-scene[data-text='bottom']::before, html.xp-live .xp-scene--open::before { background: linear-gradient(0deg, rgba(4, 5, 7, 0.8) 0%, rgba(4, 5, 7, 0.3) 34%, rgba(4, 5, 7, 0) 55%); }
+html.xp-live .xp-scene[data-text='left']::before { background: linear-gradient(90deg, rgba(11, 8, 22, 0.78) 0%, rgba(11, 8, 22, 0.35) 38%, rgba(11, 8, 22, 0) 60%); }
+html.xp-live .xp-scene[data-text='right']::before { background: linear-gradient(270deg, rgba(11, 8, 22, 0.78) 0%, rgba(11, 8, 22, 0.35) 38%, rgba(11, 8, 22, 0) 60%); }
+html.xp-live .xp-scene[data-text='bottom']::before, html.xp-live .xp-scene--open::before { background: linear-gradient(0deg, rgba(11, 8, 22, 0.8) 0%, rgba(11, 8, 22, 0.3) 34%, rgba(11, 8, 22, 0) 55%); }
 html.xp-live .xp-card { pointer-events: none; gap: 22px; }
 html.xp-live .xp-card a, html.xp-live .xp-card button { pointer-events: auto; }
 html.xp-live .xp-scene[data-text='left'] .xp-card { align-self: center; max-width: min(560px, 44vw); margin: 0 auto 0 max(0px, calc((100vw - var(--max)) / 2)); }
@@ -82,7 +82,7 @@ html.xp-live .xp-scene[data-text='bottom'] { align-items: end; padding-bottom: 1
 html.xp-live .xp-scene[data-text='bottom'] .xp-card { align-items: center; text-align: center; max-width: 900px; }
 html.xp-live .xp-scene--open { align-items: end; padding-bottom: 96px; }
 html.xp-live .xp-scene--open .xp-card { gap: 20px; }
-html.xp-live .xp-scene--open .xp-title__big { font-size: clamp(90px, 13vw, 220px); }
+html.xp-live .xp-scene--open .xp-title__big { font-size: clamp(80px, 10vw, 170px); }
 
 /* Cards write themselves on: each line rises in turn */
 html.xp-live .xp-card > * { opacity: 0; transform: translateY(22px); transition: opacity 0.6s var(--ease), transform 0.8s var(--ease); }
@@ -94,11 +94,11 @@ html.xp-live .xp-quotes figure { opacity: 0; animation: xpQuote 13.5s infinite; 
 html.xp-live .xp-quotes figure:nth-child(2) { animation-delay: 4.5s; } html.xp-live .xp-quotes figure:nth-child(3) { animation-delay: 9s; }
 @keyframes xpQuote { 0%, 100% { opacity: 0; transform: translateY(10px); } 4%, 30% { opacity: 1; transform: none; } 34% { opacity: 0; transform: translateY(-10px); } }
 @media (pointer: fine) { html.xp-live .xp-hint { display: inline-flex; gap: 10px; align-items: center; } html.xp-live .xp-hint::before { content: ''; width: 18px; height: 1px; background: currentColor; } }
-html.xp-live .xp-dim { display: block; position: fixed; inset: 0; z-index: 1; background: #040507; opacity: 0; pointer-events: none; }
+html.xp-live .xp-dim { display: block; position: fixed; inset: 0; z-index: 1; background: #0b0816; opacity: 0; pointer-events: none; }
 
 /* HUD */
 html.xp-live .xp-hud { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; align-items: center; justify-content: space-between; gap: 18px; padding: 14px var(--gutter) 16px;
-  font: 600 11px/1 var(--f-body); letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); pointer-events: none; background: linear-gradient(180deg, transparent, rgba(4, 5, 7, 0.75)); transition: opacity 0.3s; }
+  font: 600 11px/1 var(--f-body); letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); pointer-events: none; background: linear-gradient(180deg, transparent, rgba(11, 8, 22, 0.75)); transition: opacity 0.3s; }
 .xp-hud button { pointer-events: auto; }
 .xp-hud__left, .xp-hud__right { display: flex; align-items: center; gap: 16px; white-space: nowrap; min-width: 0; }
 .xp-hud__left { overflow: hidden; }
@@ -146,7 +146,7 @@ html.xp-live .xp-leader { display: grid; place-items: center; align-content: cen
 @media (max-width: 860px) {
   html.xp-live .xp-scene, html.xp-live .xp-scene[data-text] { align-items: end; padding: calc(var(--header-h) + 40px) 16px 86px; }
   html.xp-live .xp-scene[data-text='left'] .xp-card, html.xp-live .xp-scene[data-text='right'] .xp-card { max-width: 100%; margin: 0; align-self: end; }
-  html.xp-live .xp-scene[data-text]::before { inset: 40% 0 0; background: linear-gradient(0deg, rgba(4, 5, 7, 0.92) 30%, rgba(4, 5, 7, 0)); }
+  html.xp-live .xp-scene[data-text]::before { inset: 40% 0 0; background: linear-gradient(0deg, rgba(11, 8, 22, 0.92) 30%, rgba(11, 8, 22, 0)); }
   html.xp-live .xp-scene--open[data-text]::before { inset: 30% 0 0; }
   html.xp-live .xp-card { gap: 14px; }
   .xp-h { font-size: clamp(38px, 11vw, 58px); }

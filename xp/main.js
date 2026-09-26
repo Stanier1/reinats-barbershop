@@ -6,14 +6,13 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { buildWorld } from './world.js';
 import { createSound } from './sound.js';
 
 const docEl = document.documentElement;
 const SCENES = [
-  { id: 'open', title: 'Opening titles', hold: 40, travel: 80, pos: [0, 1.6, 8.2], tgt: [0, 2.2, -2.2], frame: 'top' },
+  { id: 'open', title: 'Opening titles', hold: 40, travel: 80, pos: [0, 1.7, 7.6], tgt: [0, 2.25, -2.2], frame: 'top' },
   { id: 'origin', title: 'The origin', hold: 60, travel: 80, pos: [5.75, 2.15, 1.0], tgt: [3.95, 1.95, -1.9], frame: 'left' },
   { id: 'chair', title: 'The chair', hold: 60, travel: 80, pos: [2.25, 1.7, -9.3], tgt: [0, 0.95, -12], frame: 'right' },
   { id: 'fade', title: 'Skin Fade', hold: 60, travel: 70, pos: [-1.2, 1.92, -18.6], tgt: [-2.4, 1.72, -22.2], frame: 'left' },
@@ -31,13 +30,22 @@ const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const smooth = (t) => t * t * (3 - 2 * t);
 
 const FilmShader = {
-  uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uRes: { value: new THREE.Vector2(1, 1) }, uAb: { value: 0.012 }, uDim: { value: 0 } },
+  uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uRes: { value: new THREE.Vector2(1, 1) }, uAb: { value: 0.012 }, uDim: { value: 0 }, uExposure: { value: 1.12 } },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-  fragmentShader: `uniform sampler2D tDiffuse; uniform float uTime; uniform vec2 uRes; uniform float uAb; uniform float uDim; varying vec2 vUv;
+  // One pass does it all: lens fringing, ACES tone mapping, sRGB, vignette, grain (saves a full-screen OutputPass).
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float uTime; uniform vec2 uRes; uniform float uAb; uniform float uDim; uniform float uExposure; varying vec2 vUv;
     float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+    vec3 rrt(vec3 v){ vec3 a = v * (v + 0.0245786) - 0.000090537; vec3 b = v * (0.983729 * v + 0.4329510) + 0.238081; return a / b; }
+    vec3 aces(vec3 c){ const mat3 I = mat3(vec3(0.59719, 0.07600, 0.02840), vec3(0.35458, 0.90834, 0.13383), vec3(0.04823, 0.01566, 0.83777));
+      const mat3 O = mat3(vec3(1.60475, -0.10208, -0.00327), vec3(-0.53108, 1.10813, -0.07276), vec3(-0.07367, -0.00605, 1.07602));
+      c *= uExposure / 0.6; return clamp(O * rrt(I * c), 0.0, 1.0); }
+    vec3 srgb(vec3 c){ return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c)); }
     void main(){ vec2 d = vUv - 0.5; float r2 = dot(d, d); vec2 o = d * r2 * uAb * 4.0;
       vec3 c = vec3(texture2D(tDiffuse, vUv + o).r, texture2D(tDiffuse, vUv).g, texture2D(tDiffuse, vUv - o).b);
-      c *= mix(1.0, smoothstep(0.95, 0.2, sqrt(r2) * 1.15), 0.7);
+      c = srgb(aces(c));
+      float lum = dot(c, vec3(0.299, 0.587, 0.114)); c = mix(vec3(lum), c, 1.18);            // vibrance
+      c = c + vec3(0.045, 0.02, 0.07) * (1.0 - smoothstep(0.0, 0.35, lum));                  // shadows lift to violet, never flat black
+      c *= mix(1.0, smoothstep(0.95, 0.2, sqrt(r2) * 1.15), 0.42);
       c += (h(vUv * uRes + fract(uTime * 7.0) * 91.0) - 0.5) * 0.05;
       gl_FragColor = vec4(c * (1.0 - uDim), 1.0); }`
 };
@@ -56,21 +64,24 @@ function boot() {
   const q = new URLSearchParams(location.search).get('xpq');
   const coarse = matchMedia('(pointer: coarse)').matches;
   let W = innerWidth, H = innerHeight, small = W < 760 || coarse;
-  let DPR = Math.min(devicePixelRatio || 1, small ? 1.25 : 1.6);
+  const gl = renderer.getContext(), dbg = gl.getExtension('WEBGL_debug_renderer_info');
+  const gpu = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
+  const lowGPU = small || /Intel|Mali|Adreno|PowerVR|SwiftShader|llvmpipe|Basic Render|Radeon\(TM\) (R[2-7]|Vega [3-8]) /i.test(gpu);
+  const MAXPR = Math.min(devicePixelRatio || 1, small ? 1.5 : 1.75);
+  let scale = q === 'high' ? 1 : lowGPU ? Math.min(1, 1 / MAXPR) : Math.min(1, 1.25 / MAXPR); // start at about 1x CSS pixels on weaker GPUs
+  let DPR = MAXPR * scale;
   renderer.setPixelRatio(DPR); renderer.setSize(W, H, false);
-  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.92;
 
   let world;
   try { world = buildWorld(renderer, { small }); } catch (e) { fail(); return; }
   const { scene } = world;
-  const camera = new THREE.PerspectiveCamera(42, W / H, 0.08, 140);
+  const camera = new THREE.PerspectiveCamera(42, W / H, 0.08, 200);
 
-  const rt = new THREE.WebGLRenderTarget(W * DPR, H * DPR, { type: THREE.HalfFloatType, samples: small ? 0 : 4 });
+  const rt = new THREE.WebGLRenderTarget(W * DPR, H * DPR, { type: THREE.HalfFloatType, samples: q === 'high' ? 4 : lowGPU ? 0 : 2 });
   const composer = new EffectComposer(renderer, rt);
   composer.setPixelRatio(DPR); composer.setSize(W, H);
   composer.addPass(new RenderPass(scene, camera));
   const bloom = new UnrealBloomPass(new THREE.Vector2(W, H), 0.6, 0.5, 0.95); composer.addPass(bloom);
-  composer.addPass(new OutputPass());
   const film = new ShaderPass(FilmShader); composer.addPass(film);
 
   /* ---------- Camera stops: CatmullRom through the positions, slerp between orientations ---------- */
@@ -166,7 +177,9 @@ function boot() {
   /* ---------- Loop ---------- */
   const leader = document.querySelector('.xp-leader');
   const started = performance.now();
-  let sp = -1, last = performance.now(), introT = 0, signFlick = 0, buzzKick = 0, frames = 0, slow = 0, lastScene = -1, lastSnip = -1, shinged = false, prevC = 0;
+  let ema = 0, good = 0;
+  const setScale = (s) => { scale = s; DPR = MAXPR * s; renderer.setPixelRatio(DPR); composer.setPixelRatio(DPR); composer.setSize(W, H); film.uniforms.uRes.value.set(W * DPR, H * DPR); };
+  let sp = -1, last = performance.now(), introT = 0, signFlick = 0, buzzKick = 0, frames = 0, lastScene = -1, lastSnip = -1, shinged = false, prevC = 0;
   const pos = new THREE.Vector3(), quat = new THREE.Quaternion(), fwd = new THREE.Vector3(), right = new THREE.Vector3(), up = new THREE.Vector3(), offs = { x: 0, y: 0 };
   let st = null;
   const state = {
@@ -249,19 +262,31 @@ function boot() {
     bloom.strength = 0.6 + Math.min(0.4, vel * 0.2);
     if (past < 0.995) composer.render(dt);
 
-    // Adaptive quality: if frames are slow, drop resolution, then MSAA and bloom.
+    // Adaptive quality: keep frames under ~22ms by trading MSAA, then resolution, then bloom; climb back when there's headroom.
     frames++;
-    if (q !== 'high' && frames > 30 && frames < 240) {
-      if (dt > 0.034) slow++;
-      if (slow > 40 && DPR > 1) { DPR = 1; renderer.setPixelRatio(1); composer.setPixelRatio(1); composer.setSize(W, H); slow = 0; }
-      else if (slow > 60 && bloom.enabled) { bloom.enabled = false; slow = 0; }
+    if (q !== 'high' && rawDt < 0.5) {
+      ema = ema ? ema * 0.92 + rawDt * 1000 * 0.08 : rawDt * 1000;
+      if (frames % 30 === 0 && frames > 20) {
+        if (ema > 22) {
+          good = 0;
+          if (composer.renderTarget1.samples > 0) { [composer.renderTarget1, composer.renderTarget2].forEach((r) => { r.samples = 0; r.dispose(); }); }
+          else if (scale > 0.55 / MAXPR + 0.01) setScale(Math.max(0.55 / MAXPR, scale * 0.82));
+          else if (bloom.enabled) bloom.enabled = false;
+        } else if (ema < 12.5 && ++good >= 3 && scale < 1) { good = 0; setScale(Math.min(1, scale * 1.12)); }
+      }
     }
     if (frames === 2 && leader) { const wait = Math.max(0, 1500 - (now - started)); setTimeout(() => { leader.classList.add('is-done'); setTimeout(() => leader.remove(), 900); }, wait); }
   }
-  requestAnimationFrame(frame);
+  // Compile every shader up front (behind the film leader) so props don't stall the first time they come into view.
+  let begun = false;
+  const begin = () => { if (begun) return; begun = true; requestAnimationFrame(frame); };
+  camera.position.set(...SCENES[0].pos); camera.lookAt(...SCENES[0].tgt);
+  try { (renderer.compileAsync ? renderer.compileAsync(scene, camera) : Promise.resolve(renderer.compile(scene, camera))).then(begin, begin); } catch (e) { begin(); }
+  setTimeout(begin, 5000);
   document.addEventListener('visibilitychange', () => { if (document.hidden) { sound.pause(); world.pauseVideo(); } else sound.resume(); });
   // Small public handle: scene jumps for the HUD and for automated checks.
   window.RBFilm = { go, scenes: SCENES.map((s) => s.id), state: () => ({ c: state.c, scene: SCENES[Math.round(state.c)].id }),
+    quality: () => ({ gpu, lowGPU, pixelRatio: +DPR.toFixed(2), msaa: composer.renderTarget1.samples, bloom: bloom.enabled, frameMs: +ema.toFixed(1) }),
     jump: (k, f = 0.35) => { const y = yFor(k) + (f - 0.35) * SCENES[k].hold * unit; if (window.RBLenis) window.RBLenis.scrollTo(y, { immediate: true }); else scrollTo(0, y); sp = -1; } };
 }
 
